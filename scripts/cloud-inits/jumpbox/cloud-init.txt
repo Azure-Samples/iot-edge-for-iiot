@@ -1,0 +1,12 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+packages:
+  - curl
+runcmd:
+  - |
+      set -x
+      (
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      ) &

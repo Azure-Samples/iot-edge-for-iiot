@@ -1,0 +1,3 @@
+# Make sure that bash scripts and text files have linux end of line characters, even when checked-out from a Windows machine
+*.sh text eol=lf 
+*.txt text eol=lf 

@@ -1,0 +1,113 @@
+{
+  "modulesContent": {
+    "$edgeAgent": {
+      "properties.desired": {
+        "schemaVersion": "1.1",
+        "runtime": {
+          "type": "docker",
+          "settings": {
+            "minDockerVersion": "v1.25",
+            "loggingOptions": "",
+            "registryCredentials": {
+              "iotedgeforiiotACR": {
+                "address": "iotedgeforiiot.azurecr.io",
+                "username": "2ad19b50-7a8a-45c4-8d11-20636732495f",
+                "password": "bNi_CoTYr.VNugCZn1wTd_v09AJ6NPIM0_"
+              }
+            }
+          }
+        },
+        "systemModules": {
+          "edgeAgent": {
+            "type": "docker",
+            "settings": {
+              "image": "iotedgeforiiot.azurecr.io/azureiotedge-agent:1.2.0-rc1-linux-amd64",
+              "createOptions": "{}"
+            },
+            "https_proxy": {	
+              "value": "http://10.16.8.4:3128"
+            }
+          },
+          "edgeHub": {
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "startupOrder": 1,
+            "settings": {
+              "image": "iotedgeforiiot.azurecr.io/azureiotedge-hub:1.2.0-rc1-linux-amd64",
+              "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"5671\/tcp\": [{\"HostPort\": \"5671\"}],\"8883\/tcp\": [{\"HostPort\": \"8883\"}]}}}"
+            },
+            "env": {	
+              "experimentalFeatures:enabled": {	
+                "value": "true"
+              },
+              "experimentalFeatures:nestedEdgeEnabled": {	
+                "value": "true"
+              },
+              "https_proxy": {	
+                "value": "http://10.16.8.4:3128"
+              }
+            }
+          }
+        },
+        "modules": {
+          "dockerContainerRegistry": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "startupOrder": 2,
+            "settings": {
+              "image": "registry:latest",
+              "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"5000\/tcp\": [{\"HostPort\": \"5000\"}]}}}"
+            },
+            "env": {
+              "REGISTRY_PROXY_REMOTEURL": {
+                "value": "https://iotedgeforiiot.azurecr.io:443"
+              },
+              "REGISTRY_PROXY_USERNAME": {
+                "value": "2ad19b50-7a8a-45c4-8d11-20636732495f"
+              },
+              "REGISTRY_PROXY_PASSWORD": {
+                "value": "bNi_CoTYr.VNugCZn1wTd_v09AJ6NPIM0_"
+              },
+              "https_proxy": {
+                "value": "http://10.16.8.4:3128"
+              }
+            }
+          },
+          "iotedgeApiProxy": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "startupOrder": 3,
+            "settings": {
+              "image": "iotedgeforiiot.azurecr.io/azureiotedge-api-proxy:latest",
+              "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"443\/tcp\": [{\"HostPort\": \"443\"}]}}}"
+            },
+            "env": {
+              "NGINX_DEFAULT_PORT": {
+                "value": "443"
+              },
+              "DOCKER_REQUEST_ROUTE_ADDRESS": {
+                "value": "dockerContainerRegistry:5000"
+              }
+            }
+          }
+        }
+      }
+    },
+    "$edgeHub": {
+      "properties.desired": {
+        "schemaVersion": "1.1",
+        "routes": {
+          "ToUpstream": "FROM /messages/* INTO $upstream"
+        },
+        "storeAndForwardConfiguration": {
+          "timeToLiveSecs": 7200
+        }
+      }
+    }
+  }
+}

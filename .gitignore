@@ -1,0 +1,7 @@
+/**/bin/**/*
+/**/obj/**/*
+/**/publish/**/*
+
+/.vscode/*
+
+/todo.txt
