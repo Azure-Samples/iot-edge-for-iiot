@@ -53,8 +53,7 @@ In this sample, we will simulate in Azure a Purdue network, industrial assets an
 
 To simulate a factory, the following scripts automate the deployment of a Purdue network, industrial assets and a hierarchy of IoT Edge gateways to acquire industrial data and upload their data securely without compromising the security of the Purdue Network.
 
-<!-- TODO1: Add picture of Purdue network -->
-![Simulated Purdue Network with default nested IoT Edge deployment](assets/SimulatedPurdueNetwork.png)
+![Simulated Purdue Network with default nested IoT Edge deployment](assets/SimulatedPurdueNetwork.svg)
 
 From the [Azure Cloud Shell](https://shell.azure.com/):
 
