@@ -11,34 +11,26 @@ In this sample, we will simulate in Azure a Purdue network, industrial assets an
 - An **Azure account with a valid subscription**. When using the default simulation configuration, 6 Virtual Machines and 1 Virtual Network (VNet) will be deployed in your subscription for a daily cost of **$3.03** and an additional **$2.00** per 100Gb inbound and outbound used in the VNet. For more details, see this [Azure Pricing Estimate](https://azure.com/e/4df47d47440b43e78076078496e2c3d1).
 - An **IoT Hub** that supports IoT Edge devices (SKU F1 --which is free--, S1, S2 or S3).
 - An **SSH client**.
-- **[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) with the nested edge preview `azure-iot` CLI extension** installed. We'll use the [Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview) in this tutorial for which only a browser is needed.
+- **[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) with the `azure-iot` CLI extension 0.10.6 or above** installed. We'll use the [Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview) in this tutorial for which only a browser is needed.
     1. Open the [Azure Cloud Shell](https://shell.azure.com/) from your browser
     2. If you're using [Azure Cloud Shell](https://shell.azure.com/) for the first time, you'll be prompted to select a subscription to create a storage account and a Microsoft Azure Files share. Select Create storage to create a storage account for your Cloud Shell session information. This storage account is separate from resources used in this tutorial.
-    3. To install the nested edge preview `azure-iot` CLI extension in your Azure Cloud Shell
-        - Make sure that you're running the latest Azure CLI:
+    3. Make sure that `azure-iot` CLI extension version `0.10.6` or above is installed in your Azure Cloud Shell:
+        - Verify if the `azure-iot` extension is already installed and with which version:
 
             ```bash
-            az upgrade
+            az --version
             ```
 
-        - Remove the `azure-iot` extension if it was already installed:
+        - If not yet installed, install it:
 
             ```bash
-            az extension list-available --output table | grep azure-iot
-            az extension remove --name azure-iot
+            az extension install --name azure-iot
             ```
 
-        - Install the nested edge preview `azure-iot` extension:
+        - If an older version than `0.10.6` is installed, update it:
 
             ```bash
-            wget -O azure_iot-0.0.7rc1-py3-none-any.whl "https://iotedgeforiiot.blob.core.windows.net/cli-public-preview/azure_iot-0.0.7rc1-py3-none-any.whl"
-            az extension add --source azure_iot-0.0.7rc1-py3-none-any.whl
-            ```
-
-        - Verify successful installation by running a test command:
-
-            ```bash
-            az iot hub list --hub-name <iothub_name>
+            az extension update --name azure-iot
             ```
 
     4. Verify that your are using the right subscription:
@@ -60,13 +52,13 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
 - Download the scripts:
 
     ```bash
-    git clone https://github.com/ebertrams/iotedge4iiot-e2e.git
+    git clone https://github.com/Azure-Samples/iot-edge-for-iiot.git
     ```
 
 - Give execution permissions to these script:
 
     ```bash
-    cd ./iotedge4iiot-e2e
+    cd ./iot-edge-for-iiot
     find  -name '*.sh' -print0 | xargs -0 chmod +x
     ```
 
