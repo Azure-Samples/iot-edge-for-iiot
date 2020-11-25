@@ -65,7 +65,7 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
 - Configure your simulation or keep the default one that deploys 3 IoT Edge devices in layers L5, L4 and L3:
 
     ```bash
-    nano config.txt
+    code config.txt
     ```
 
     Here are some notes if you want to change the default configuration:
