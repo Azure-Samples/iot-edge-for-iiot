@@ -15,40 +15,38 @@ else
     fi
 fi
 
-
+# Validating parameters
 echo "Executing script with parameters:"
-echo "Device connection string: ${dcs}"
-echo "FQDN: ${fqdn}"
-echo "Parent FQDN: ${parentFqdn}"
-echo "ProxySettings: ${proxySettings}"
-
+echo "- Device connection string: ${dcs}"
+echo "- FQDN: ${fqdn}"
+echo "- Parent FQDN: ${parentFqdn}"
+echo "- ProxySettings: ${proxySettings}"
+echo ""
 if [ -z $1 ]; then
     echo "Missing device connection string. Please pass a device connection string as a primary parameter. Exiting."
     exit 1
 fi
-
 if [ -z $2 ]; then
     echo "Missing device Fully Domain Qualified Name (FQDN). Please pass a FQDN as a secondary parameter. Exiting."
     exit 1
 fi
 
-echo "---------------------"
-
+# Waiting for IoT Edge installation to be complete
 i=0
-dpkg -s iotedge &> /dev/null
-while [ $? -ne 0 ]
-do
-   echo "waiting 10s for IoT Edge to complete its installation"
-   sleep 10
-   ((i++))
-   if [ $i -gt 30 ]; then
-        dpkg -s iotedge
-        echo "IoT Edge is not installed. Please install it first. Exiting."
+iotedgeConfigFile="/etc/iotedge/config.yaml"
+while [[ ! -f "$iotedgeConfigFile" ]]; do
+    echo "Waiting 10s for IoT Edge to complete its installation"
+    sleep 10
+    ((i++))
+    if [ $i -gt 30 ]; then
+        echo "Something went wrong in the installation of IoT Edge. Please install IoT Edge first. Exiting."
         exit 1
    fi
-   dpkg -s iotedge &> /dev/null
 done
+echo "Installation of IoT Edge is complete. Starting its configuration."
+echo ""
 
+# Configuring IoT Edge
 echo "Updating the device connection string"
 sudo sed -i "s#\(device_connection_string: \).*#\1\"$dcs\"#g" /etc/iotedge/config.yaml
 

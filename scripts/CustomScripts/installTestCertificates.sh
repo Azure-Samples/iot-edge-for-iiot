@@ -2,31 +2,31 @@
 
 deviceId=$1
 
-echo "Setting up test nested edge configuration for IoT Edge device $deviceId"
-
-i=0
-dpkg -s iotedge &> /dev/null
-while [ $? -ne 0 ]
-do
-   echo "waiting 10s for IoT Edge to complete its installation"
-   sleep 10
-   ((i++))
-   if [ $i -gt 30 ]; then
-        dpkg -s iotedge
-        echo "IoT Edge is not installed. Please install it first. Exiting."
-        exit 1
-   fi
-   dpkg -s iotedge &> /dev/null
-done
-
-
+# Validating parameters
 if [ -z $1 ]; then
         echo "Missing deviceId. Please pass a deviceId as a parameter. Exiting."
         exit 1
 fi
+echo "Setting up test nested edge configuration for IoT Edge device $deviceId"
+echo ""
 
+# Waiting for IoT Edge installation to be complete
+i=0
+iotedgeConfigFile="/etc/iotedge/config.yaml"
+while [[ ! -f "$iotedgeConfigFile" ]]; do
+    echo "Waiting 10s for IoT Edge to complete its installation"
+    sleep 10
+    ((i++))
+    if [ $i -gt 30 ]; then
+        echo "Something went wrong in the installation of IoT Edge. Please install IoT Edge first. Exiting."
+        exit 1
+   fi
+done
+echo "Installation of IoT Edge is complete. Starting its configuration."
+echo ""
+
+# Installing certificates
 #TODO2: erase certs folder first
-
 echo "Installing test root certificate bundle. NOT TO BE USED FOR PRODUCTION."
 mkdir /certs
 cd /certs
