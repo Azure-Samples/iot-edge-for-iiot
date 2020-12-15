@@ -168,7 +168,7 @@ do
     --vm-name ${iotEdgeDevices[$i]} \
     --name customScript \
     --publisher Microsoft.Azure.Extensions \
-    --settings '{"fileUris": ["https://iotedgeforiiot.blob.core.windows.net/iotedge-vms-custom-scripts-public-preview/installTestCertificates.sh"],"commandToExecute": "./installTestCertificates.sh \"'${iotEdgeDevices[$i]}'\""}' \
+    --settings '{"fileUris": ["https://raw.githubusercontent.com/ebertrams/iotedge4iiot-e2e/master/scripts/CustomScripts/installTestCertificates.sh"],"commandToExecute": "./installTestCertificates.sh \"'${iotEdgeDevices[$i]}'\""}' \
     --output none \
     --no-wait
 done

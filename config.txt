@@ -35,4 +35,4 @@ AcrEnvFilePath: ../ACR.env
 TopLayerBaseDeploymentTemplateFilePath: ./edgeDeployments/topLayerBaseDeploymentItProxy.template.json
 MiddleLayerBaseDeploymentFilePath: ./edgeDeployments/middleLayerBaseDeployment.json
 BottomLayerBaseDeploymentFilePath: ./edgeDeployments/bottomLayerBaseDeploymentOtProxy.json
-RootCA: https://iotedgeforiiot.blob.core.windows.net/test-certificates/test-certs.tar.bz2
+RootCA: https://raw.githubusercontent.com/ebertrams/iotedge4iiot-e2e/master/scripts/assets/test-certs.tar.bz2
