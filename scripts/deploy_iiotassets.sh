@@ -8,15 +8,15 @@ function show_help() {
    echo ""
    echo "List of optional flags:"
    echo "-h                Print this help."
-   echo "-adminUsername   Administrator username of the Azure VMs to deploy. Default: iiotadmin."
+   echo "-c                Path to configuration file with IIOT assets information."
+   echo "-l                Azure region to deploy resources to."
+   echo "-n                Name of the Azure Virtual Network with the Purdue Network."
+   echo "-s                Azure subscription to use to deploy resources."
+   echo "-rg               Prefix used for all new Azure Resource Groups created by this script."
+   echo "-nrg              Azure Resource Group with the Purdue Network."
+   echo "-vmSize          Size of the Azure VMs to deploy."
+   echo "-adminUsername   Administrator username of the Azure VMs to deploy."
    echo "-adminPassword   Administrator password of the Azure VMs to deploy."
-   echo "-c                Path to configuration file with IIOT assets information. Default: ../config.txt."
-   echo "-l                Azure region to deploy resources to. Default: eastus."
-   echo "-n                Name of the Azure Virtual Network with the Purdue Network. Default: PurdueNetwork."
-   echo "-s                Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
-   echo "-rg               Prefix used for all new Azure Resource Groups created by this script. Default: iotedge4iiot."
-   echo "-nrg              Azure Resource Group with the Purdue Network. Default: {rg}-RG-network."
-   echo "-vmSize           Default: Standard_B1ms."
    echo
 }
 
@@ -42,12 +42,10 @@ function passArrayToARM() {
 scriptFolder=$(dirname "$(readlink -f "$0")")
 
 # Default settings
-location="eastus"
-resourceGroupPrefix="iotedge4iiot"
 networkName="PurdueNetwork"
 configFilePath="${scriptFolder}/../config.txt"
 adminUsername="iiotadmin"
-vmSize="Standard_B1ms" #"Standard_D3_v2"
+vmSize="Standard_D3_v2"
 
 # Get arguments
 while :; do

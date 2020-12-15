@@ -8,19 +8,19 @@ function show_help() {
    # Display Help
    echo "Run this script to simulate in Azure: a Purdue Network, PLCs, IoT Edge devices sending data to IoT Hub."
    echo
-   echo "Syntax: ./install.sh [-flag=value]"
+   echo "Syntax: ./install_default.sh [-flag=value]"
    echo ""
    echo "List of mandatory flags:"
-   echo "-hubrg            Azure Resource Group with the Azure IoT Hub."
-   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices."
+   echo "-hubrg            Azure Resource Group with the Azure IoT Hub"
+   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices"
    echo ""
    echo "List of optional flags:"
    echo "-h         Print this help."
-   echo "-c         Path to configuration file with IIOT assets and IoT Edge VMs information. Default: ./config.txt."
-   echo "-s         Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
-   echo "-l         Azure region to deploy resources to. Default: eastus."
-   echo "-rg        Prefix used for all new Azure Resource Groups created by this script. Default: iotedge4iiot."
-   echo "-vmSize   Size of the Azure VMs to deploy. Default: Standard_B1ms."
+   echo "-c         Path to configuration file with IoT Edge VMs information."
+   echo "-s         Azure subscription to use to deploy resources."
+   echo "-l         Azure region to deploy resources to."
+   echo "-rg        Prefix used for all new Azure Resource Groups created by this script."
+   echo "-vmSize   Size of the Azure VMs to deploy."
    echo
 }
 
@@ -133,7 +133,6 @@ echo ""
 ./scripts/provision_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName
 ./scripts/configure_iotedge_vms.sh -s=$subscription -edgerg=$iotedgeResourceGroupName -hubrg=$iotHubResourceGroup -hubname=$iotHubName
 ./scripts/lockdown_purdue.sh -s=$subscription -nrg=$networkResourceGroupName
-./scripts/import_acr.sh -s=$subscription
 ./scripts/deploy_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName
 
 echo "==========================================================="

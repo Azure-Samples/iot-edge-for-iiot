@@ -4,16 +4,16 @@ function show_help() {
    # Display Help
    echo "Run this script to provision IoT Edge devices in IoT Hub."
    echo
-   echo "Syntax: ./provision_iotedge_iothub.sh [-flag parameter]"
+   echo "Syntax: ./config_iotedge_vms.sh [-flag parameter]"
    echo ""
    echo "List of mandatory flags:"
-   echo "-hubrg            Azure Resource Group with the Azure IoT Hub controlling IoT Edge devices."
-   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices."
+   echo "-hubrg            Azure Resource Group with the Azure IoT Hub controlling IoT Edge devices"
+   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices"
    echo ""
    echo "List of optional flags:"
    echo "-h                Print this help."
-   echo "-c                Path to configuration file with IoT Edge devices provisioning information. Default: ../config.txt."
-   echo "-s                Azure subscription ID where resources have been deployed. Default: use current subscription of Azure CLI."
+   echo "-c                Path to configuration file with IoT Edge devices provisioning information."
+   echo "-s                Azure subscription where resources have been deployed"
    echo
 }
 

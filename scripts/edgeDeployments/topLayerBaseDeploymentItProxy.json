@@ -10,9 +10,9 @@
             "loggingOptions": "",
             "registryCredentials": {
               "iotedgeforiiotACR": {
-                "address": "ebertraacr010.azurecr.io",
-                "username": "ebertraacr010",
-                "password": "BMs7jT++1QLk+wca==K+qckdQcXdnAus"
+                "address": "iotedgeforiiot.azurecr.io",
+                "username": "2ad19b50-7a8a-45c4-8d11-20636732495f",
+                "password": "bNi_CoTYr.VNugCZn1wTd_v09AJ6NPIM0_"
               }
             }
           }
@@ -21,7 +21,7 @@
           "edgeAgent": {
             "type": "docker",
             "settings": {
-              "image": "ebertraacr010.azurecr.io/azureiotedge-agent:1.2.0-rc2",
+              "image": "iotedgeforiiot.azurecr.io/azureiotedge-agent:1.2.0-rc1-linux-amd64",
               "createOptions": "{}"
             },
             "https_proxy": {	
@@ -34,7 +34,7 @@
             "restartPolicy": "always",
             "startupOrder": 1,
             "settings": {
-              "image": "ebertraacr010.azurecr.io/azureiotedge-hub:1.2.0-rc2",
+              "image": "iotedgeforiiot.azurecr.io/azureiotedge-hub:1.2.0-rc1-linux-amd64",
               "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"5671\/tcp\": [{\"HostPort\": \"5671\"}],\"8883\/tcp\": [{\"HostPort\": \"8883\"}]}}}"
             },
             "env": {	
@@ -63,13 +63,13 @@
             },
             "env": {
               "REGISTRY_PROXY_REMOTEURL": {
-                "value": "https://ebertraacr010.azurecr.io:443"
+                "value": "https://iotedgeforiiot.azurecr.io:443"
               },
               "REGISTRY_PROXY_USERNAME": {
-                "value": "ebertraacr010"
+                "value": "2ad19b50-7a8a-45c4-8d11-20636732495f"
               },
               "REGISTRY_PROXY_PASSWORD": {
-                "value": "BMs7jT++1QLk+wca==K+qckdQcXdnAus"
+                "value": "bNi_CoTYr.VNugCZn1wTd_v09AJ6NPIM0_"
               },
               "https_proxy": {
                 "value": "http://10.16.8.4:3128"
@@ -83,7 +83,7 @@
             "restartPolicy": "always",
             "startupOrder": 3,
             "settings": {
-              "image": "ebertraacr010.azurecr.io/azureiotedge-api-proxy:latest",
+              "image": "iotedgeforiiot.azurecr.io/azureiotedge-api-proxy:latest",
               "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"443\/tcp\": [{\"HostPort\": \"443\"}]}}}"
             },
             "env": {

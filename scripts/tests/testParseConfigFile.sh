@@ -36,11 +36,10 @@ expectedIotEdgeDevicesSubnets=("7-L5-IT-EnterpriseNetwork" "6-L4-IT-SiteLogistic
 expectedIotEdgeParentDevices=("IoTHub" "L5-edge" "L4-edge")
 expectedIiotAssets=()
 expectedIiotAssetsSubnets=()
-expectedTAcrEnvFilePath="./ACR.env"
-expectedTopLayerBaseDeploymentTemplateFilePath="./edgeDeployments/topLayerBaseDeploymentItProxy.template.json"
+expectedTopLayerBaseDeploymentFilePath="./edgeDeployments/topLayerBaseDeploymentItProxy.json"
 expectedMiddleLayerBaseDeploymentFilePath="./edgeDeployments/middleLayerBaseDeployment.json"
 expectedBottomLayerBaseDeploymentFilePath="./edgeDeployments/bottomLayerBaseDeploymentOtProxy.json"
-expectedRootCA="https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/assets/test-certs.tar.bz2"
+expectedRootCA="https://iotedgeforiiot.blob.core.windows.net/test-certificates/test-certs.tar.bz2"
 echo -n "Test 2.1.1 "
 if are_arrays_equal iotEdgeDevices expectedIotEdgeDevices; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.1.2 "
@@ -52,14 +51,12 @@ if are_arrays_equal iiotAssets expectedIiotAssets; then echo -e "${GREEN}OK${NO_
 echo -n "Test 2.1.5 "
 if are_arrays_equal iiotAssetsSubnets expectedIiotAssetsSubnets; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.1.6 "
-if [ $acrEnvFilePath=$expectedAcrEnvFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
+if [ $topLayerBaseDeploymentFilePath=$expectedTopLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.1.7 "
-if [ $topLayerBaseDeploymentFilePath=$expectedTopLayerBaseDeploymentTemplateFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.1.8 "
 if [ $middleLayerBaseDeploymentFilePath=$expectedMiddleLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.1.9 "
+echo -n "Test 2.1.8 "
 if [ $bottomLayerBaseDeploymentFilePath=$expectedBottomLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.1.10 "
+echo -n "Test 2.1.9 "
 if [ $rootCA=$expectedRootCA ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 
 echo "Test 2.2"
@@ -70,11 +67,10 @@ expectedIotEdgeDevicesSubnets=("7-L5-IT-EnterpriseNetwork" "6-L4-IT-SiteLogistic
 expectedIotEdgeParentDevices=("IoTHub" "L5-edge" "L5-edge" "L4-edge-1" "L4-edge-1")
 expectedIiotAssets=()
 expectedIiotAssetsSubnets=()
-expectedTAcrEnvFilePath="./ACR.env"
-expectedTopLayerBaseDeploymentTemplateFilePath="./edgeDeployments/topLayerBaseDeploymentItProxy.template.jon"
+expectedTopLayerBaseDeploymentFilePath="./edgeDeployments/topLayerBaseDeploymentItProxy.json"
 expectedMiddleLayerBaseDeploymentFilePath="./edgeDeployments/middleLayerBaseDeployment.json"
 expectedBottomLayerBaseDeploymentFilePath="./edgeDeployments/bottomLayerBaseDeploymentOtProxy.json"
-expectedRootCA="https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/assets/test-certs.tar.bz2"
+expectedRootCA="https://iotedgeforiiot.blob.core.windows.net/test-certificates/test-certs.tar.bz2"
 echo -n "Test 2.2.1 "
 if are_arrays_equal iotEdgeDevices expectedIotEdgeDevices; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.2.2 "
@@ -85,15 +81,13 @@ echo -n "Test 2.2.4 "
 if are_arrays_equal iiotAssets expectedIiotAssets; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.2.5 "
 if are_arrays_equal iiotAssetsSubnets expectedIiotAssetsSubnets; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.1.6 "
-if [ $acrEnvFilePath=$expectedAcrEnvFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
+echo -n "Test 2.2.6 "
+if [ $topLayerBaseDeploymentFilePath=$expectedTopLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.2.7 "
-if [ $topLayerBaseDeploymentFilePath=$expectedTopLayerBaseDeploymentTemplateFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.2.8 "
 if [ $middleLayerBaseDeploymentFilePath=$expectedMiddleLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.2.9 "
+echo -n "Test 2.2.8 "
 if [ $bottomLayerBaseDeploymentFilePath=$expectedBottomLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.2.10 "
+echo -n "Test 2.2.9 "
 if [ $rootCA=$expectedRootCA ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 
 echo "Test 2.3"
@@ -104,11 +98,10 @@ expectedIotEdgeDevicesSubnets=("7-L5-IT-EnterpriseNetwork" "6-L4-IT-SiteLogistic
 expectedIotEdgeParentDevices=("IoTHub" "L5-edge" "L4-edge")
 expectedIiotAssets=("L2-OPC-UA-server-1" "L2-OPC-UA-server-2" "L2-OPC-UA-server-3" "L2-OPC-UA-server-4")
 expectedIiotAssetsSubnets=("3-L2-OT-AreaSupervisoryControl" "3-L2-OT-AreaSupervisoryControl" "3-L2-OT-AreaSupervisoryControl" "3-L2-OT-AreaSupervisoryControl")
-expectedTAcrEnvFilePath="./ACR.env"
-expectedTopLayerBaseDeploymentTemplateFilePath="./edgeDeployments/topLayerBaseDeploymentItProxy.template.jon"
+expectedTopLayerBaseDeploymentFilePath="./edgeDeployments/topLayerBaseDeploymentItProxy.json"
 expectedMiddleLayerBaseDeploymentFilePath="./edgeDeployments/middleLayerBaseDeployment.json"
 expectedBottomLayerBaseDeploymentFilePath="./edgeDeployments/bottomLayerBaseDeploymentOtProxy.json"
-expectedRootCA="https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/assets/test-certs.tar.bz2"
+expectedRootCA="https://iotedgeforiiot.blob.core.windows.net/test-certificates/test-certs.tar.bz2"
 echo -n "Test 2.3.1 "
 if are_arrays_equal iotEdgeDevices expectedIotEdgeDevices; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.3.2 "
@@ -119,19 +112,17 @@ echo -n "Test 2.3.4 "
 if are_arrays_equal iiotAssets expectedIiotAssets; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.3.5 "
 if are_arrays_equal iiotAssetsSubnets expectedIiotAssetsSubnets; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.1.6 "
-if [ $acrEnvFilePath=$expectedAcrEnvFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
+echo -n "Test 2.3.6 "
+if [ $topLayerBaseDeploymentFilePath=$expectedTopLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 echo -n "Test 2.3.7 "
-if [ $topLayerBaseDeploymentFilePath=$expectedTopLayerBaseDeploymentTemplateFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.3.8 "
 if [ $middleLayerBaseDeploymentFilePath=$expectedMiddleLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.3.9 "
+echo -n "Test 2.3.8 "
 if [ $bottomLayerBaseDeploymentFilePath=$expectedBottomLayerBaseDeploymentFilePath ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
-echo -n "Test 2.3.10 "
+echo -n "Test 2.3.9 "
 if [ $rootCA=$expectedRootCA ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo -e "${RED}NOK${NO_COLOR}"; fi
 
 
-# # Debugging utility...
+# Debugging utility...
 # echo "Edge devices: ${iotEdgeDevices[@]}"
 # echo "Expected Edge devices: ${expectedIotEdgeDevices[@]}"
 # echo "Edge devices subnets: ${iotEdgeDevicesSubnets[@]}"
@@ -142,8 +133,7 @@ if [ $rootCA=$expectedRootCA ]; then echo -e "${GREEN}OK${NO_COLOR}"; else echo 
 # echo "Expected IIOT assets: ${expectedIiotAssets[@]}"
 # echo "IIOT assets subnets: ${iiotAssetsSubnets[@]}"
 # echo "Expected IIOT assets subnets: ${expectedIiotAssetsSubnets[@]}"
-# echo "acrEnvFilePath: ${acrEnvFilePath}"
-# echo "topLayerBaseDeploymentTemplateFilePath: ${topLayerBaseDeploymentTemplateFilePath}"
+# echo "topLayerBaseDeploymentFilePath: ${topLayerBaseDeploymentFilePath}"
 # echo "middleLayerBaseDeploymentFilePath: ${middleLayerBaseDeploymentFilePath}"
 # echo "bottomLayerBaseDeploymentFilePath: ${bottomLayerBaseDeploymentFilePath}"
 # echo "rootCA: ${rootCA}"
