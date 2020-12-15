@@ -5,18 +5,18 @@ function show_help() {
    echo "Run this script to deploy multiple Azure VMs with Azure IoT Edge pre-installed across a simulated Purdue Network in Azure."
    echo
    echo "Syntax: ./deploy_iotedge_vms.sh [-flag parameter]"
+   echo "-l                Azure region to deploy resources to."
+   echo "-rg               Prefix used for all new Azure Resource Groups created by this script."
    echo ""
    echo "List of optional flags:"
    echo "-h                Print this help."
-   echo "-adminUsername    Administrator username of the Azure VMs to deploy. Default: iotedgeadmin."
-   echo "-adminPassword    Administrator password of the Azure VMs to deploy."
-   echo "-c                Path to configuration file with IoT Edge devices information. Default: ../config.txt."
-   echo "-l                Azure region to deploy resources to. Default: eastus."
-   echo "-n                Name of the Azure Virtual Network with the Purdue Network. Default: PurdueNetwork."
-   echo "-nrg              Azure Resource Group with the Purdue Network. Default: {rg}-RG-network."
-   echo "-rg               Prefix used for all new Azure Resource Groups created by this script. Default: iotedge4iiot."
-   echo "-s                Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
-   echo "-vmSize           Size of the Azure VMs to deploy. Default: Standard_B1ms."
+   echo "-c                Path to configuration file with IoT Edge VMs information."
+   echo "-n                Name of the Azure Virtual Network with the Purdue Network."
+   echo "-s                Azure subscription to use to deploy resources."
+   echo "-nrg              Azure Resource Group with the Purdue Network."
+   echo "-vmSize          Size of the Azure VMs to deploy."
+   echo "-adminUsername   Administrator username of the Azure VMs to deploy."
+   echo "-adminPassword   Administrator password of the Azure VMs to deploy."
    echo ""
 }
 
@@ -42,12 +42,10 @@ function passArrayToARM() {
 scriptFolder=$(dirname "$(readlink -f "$0")")
 
 # Default settings
-location="eastus"
-resourceGroupPrefix="iotedge4iiot"
 networkName="PurdueNetwork"
 configFilePath="${scriptFolder}/../config.txt"
 adminUsername="iotedgeadmin"
-vmSize="Standard_B1ms" #"Standard_D3_v2"
+vmSize="Standard_D3_v2"
 
 # Get arguments
 while :; do

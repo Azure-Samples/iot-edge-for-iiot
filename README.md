@@ -9,8 +9,7 @@ In this sample, we will simulate in Azure a Purdue network, industrial assets an
 ## Pre-requisites
 
 - An **Azure account with a valid subscription**. When using the default simulation configuration, 6 Virtual Machines and 1 Virtual Network (VNet) will be deployed in your subscription for a daily cost of **$3.03** and an additional **$2.00** per 100Gb inbound and outbound used in the VNet. For more details, see this [Azure Pricing Estimate](https://azure.com/e/4df47d47440b43e78076078496e2c3d1).
-- An **IoT Hub** that supports IoT Edge devices (F1 SKU --which is free--, S1, S2 or S3) in the same subscription.
-- An **Azure Container Registry (ACR)** (Basic SKU --starting at $0.17/day, see [this page](https://azure.microsoft.com/en-us/pricing/details/container-registry/) for more pricing info-- or above) in the same subscription.
+- An **IoT Hub** that supports IoT Edge devices (SKU F1 --which is free--, S1, S2 or S3).
 - An **SSH client**.
 - **[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) with the `azure-iot` CLI extension 0.10.6 or above** installed. We'll use the [Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview) in this tutorial for which only a browser is needed.
     1. Open the [Azure Cloud Shell](https://shell.azure.com/) from your browser
@@ -62,16 +61,11 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
     cd ./iot-edge-for-iiot
     find  -name '*.sh' -print0 | xargs -0 chmod +x
     ```
-- Provide credentials for IoT Edge devices to access your Azure Container Registry (ACR):
-
-    ```bash
-    code ACR.env
-    ```
 
 - Configure your simulation or keep the default one that deploys 3 IoT Edge devices in layers L5, L4 and L3:
 
     ```bash
-    code config.txt
+    nano config.txt
     ```
 
     Here are some notes if you want to change the default configuration:
