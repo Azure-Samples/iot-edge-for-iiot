@@ -39,8 +39,8 @@ runcmd:
 
         # Prevent iotedge from starting before the device connection string is set in config.yaml
         sudo ln -s /dev/null /etc/systemd/system/iotedge.service
-        sudo wget -O libiothsm-std_1.2.0_rc1_amd64.deb "https://raw.githubusercontent.com/ebertrams/iotedge4iiot-e2e/master/scripts/assets/libiothsm-std_1.2.0_rc1_amd64.deb"
-        sudo wget -O iotedge_1.2.0_rc1_amd64.deb "https://raw.githubusercontent.com/ebertrams/iotedge4iiot-e2e/master/scripts/assets/iotedge_1.2.0_rc1-amd64.deb"
+        sudo wget -O libiothsm-std_1.2.0_rc1_amd64.deb "https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/assets/libiothsm-std_1.2.0_rc1_amd64.deb"
+        sudo wget -O iotedge_1.2.0_rc1_amd64.deb "https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/assets/iotedge_1.2.0_rc1-amd64.deb"
         sudo dpkg -i libiothsm-std_1.2.0_rc1_amd64.deb
         sudo dpkg -i iotedge_1.2.0_rc1_amd64.deb
       ) &
