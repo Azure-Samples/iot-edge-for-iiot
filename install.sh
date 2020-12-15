@@ -132,7 +132,8 @@ echo ""
 ./scripts/deploy_iotedge_vms.sh -s=$subscription -l=$location -rg=$resourceGroupPrefix -vmSize=$vmSize
 ./scripts/provision_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName
 ./scripts/configure_iotedge_vms.sh -s=$subscription -edgerg=$iotedgeResourceGroupName -hubrg=$iotHubResourceGroup -hubname=$iotHubName
-./scripts/lockdown_purdue.sh -s=$subscription -nrg=$networkResourceGroupName
+#./scripts/lockdown_purdue.sh -s=$subscription -nrg=$networkResourceGroupName
+./scripts/import_acr.sh -s=$subscription
 ./scripts/deploy_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName
 
 echo "==========================================================="

@@ -10,9 +10,9 @@
             "loggingOptions": "",
             "registryCredentials": {
               "iotedgeforiiotACR": {
-                "address": "ebertraacr010.azurecr.io",
-                "username": "ebertraacr010",
-                "password": "BMs7jT++1QLk+wca==K+qckdQcXdnAus"
+                "address": "$ACR_ADDRESS",
+                "username": "$ACR_USERNAME",
+                "password": "$ACR_PASSWORD"
               }
             }
           }
@@ -21,7 +21,7 @@
           "edgeAgent": {
             "type": "docker",
             "settings": {
-              "image": "ebertraacr010.azurecr.io/azureiotedge-agent:1.2.0-rc2",
+              "image": "$ACR_ADDRESS/azureiotedge-agent:1.2.0-rc2",
               "createOptions": "{}"
             },
             "https_proxy": {	
@@ -34,7 +34,7 @@
             "restartPolicy": "always",
             "startupOrder": 1,
             "settings": {
-              "image": "ebertraacr010.azurecr.io/azureiotedge-hub:1.2.0-rc2",
+              "image": "$ACR_ADDRESS/azureiotedge-hub:1.2.0-rc2",
               "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"5671\/tcp\": [{\"HostPort\": \"5671\"}],\"8883\/tcp\": [{\"HostPort\": \"8883\"}]}}}"
             },
             "env": {	
@@ -63,13 +63,13 @@
             },
             "env": {
               "REGISTRY_PROXY_REMOTEURL": {
-                "value": "https://ebertraacr010.azurecr.io:443"
+                "value": "https://$ACR_ADDRESS:443"
               },
               "REGISTRY_PROXY_USERNAME": {
-                "value": "ebertraacr010"
+                "value": "$ACR_USERNAME"
               },
               "REGISTRY_PROXY_PASSWORD": {
-                "value": "BMs7jT++1QLk+wca==K+qckdQcXdnAus"
+                "value": "$ACR_PASSWORD"
               },
               "https_proxy": {
                 "value": "http://10.16.8.4:3128"
@@ -83,7 +83,7 @@
             "restartPolicy": "always",
             "startupOrder": 3,
             "settings": {
-              "image": "ebertraacr010.azurecr.io/azureiotedge-api-proxy:latest",
+              "image": "$ACR_ADDRESS/azureiotedge-api-proxy:latest",
               "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"443\/tcp\": [{\"HostPort\": \"443\"}]}}}"
             },
             "env": {

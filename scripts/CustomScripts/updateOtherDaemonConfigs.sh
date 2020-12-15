@@ -1,18 +1,22 @@
 #!/bin/bash
 
+# Parsing arguments
+
 dcs=$1
 fqdn=$2
-if [ ! -z $4 ]; then
+if [ $# -eq 6 ]; then
+    #top layer with proxy and ACR
+    proxySettings=$3
+    acrAddress=$4
+    acrUsername=$5
+    acrPassword=$6
+elif [ $# -eq 4 ]; then
+    #middle or bottom layer with proxy
     parentFqdn=$3
     proxySettings=$4
 else
-    if [[ $3  = https_proxy=* ]]; then
-        parentFqdn=""
-        proxySettings=$3
-    else
-        parentFqdn=$3
-        proxySettings=""
-    fi
+    #middle or bottom layer
+    parentFqdn=$3
 fi
 
 # Validating parameters
@@ -21,6 +25,9 @@ echo "- Device connection string: ${dcs}"
 echo "- FQDN: ${fqdn}"
 echo "- Parent FQDN: ${parentFqdn}"
 echo "- ProxySettings: ${proxySettings}"
+echo "- ACR address: ${acrAddress}"
+echo "- ACR username: ${acrUsername}"
+echo "- ACR password: ${acrPassword}"
 echo ""
 if [ -z $1 ]; then
     echo "Missing device connection string. Please pass a device connection string as a primary parameter. Exiting."
@@ -59,25 +66,22 @@ if [ ! -z $parentFqdn ]; then
 fi
 
 echo "Updating the version of the bootstrapping edgeAgent to be the public preview one"
-if [ ! -z $parentFqdn ]; then
-    edgeAgentImage="$parentFqdn:443/azureiotedge-agent:1.2.0-rc1-linux-amd64"
+if [ -z $parentFqdn ]; then
+    edgeAgentImage="$acrAddress:443/azureiotedge-agent:1.2.0-rc2"
 else
-    edgeAgentImage="iotedgeforiiot.azurecr.io/azureiotedge-agent:1.2.0-rc1-linux-amd64"
+    edgeAgentImage="$parentFqdn:443/azureiotedge-agent:1.2.0-rc2"
 fi
 sudo sed -i "207s|.*|    image: \"${edgeAgentImage}\"|" /etc/iotedge/config.yaml
 
 if [ -z $parentFqdn ]; then
     echo "Adding ACR credentials for IoT Edge daemon to download the bootstrapping edgeAgent"
-    iotedgeforiiotACRServerAddress="iotedgeforiiot.azurecr.io"
-    iotedgeforiiotACRUsername="2ad19b50-7a8a-45c4-8d11-20636732495f"
-    iotedgeforiiotACRPassword="bNi_CoTYr.VNugCZn1wTd_v09AJ6NPIM0_"
     sudo sed -i "208s|.*|    auth:|" /etc/iotedge/config.yaml
-    sed -i "209i\      serveraddress: \"${iotedgeforiiotACRServerAddress}\"" /etc/iotedge/config.yaml
-    sed -i "210i\      username: \"${iotedgeforiiotACRUsername}\"" /etc/iotedge/config.yaml
-    sed -i "211i\      password: \"${iotedgeforiiotACRPassword}\"" /etc/iotedge/config.yaml
+    sed -i "209i\      serveraddress: \"${acrAddress}\"" /etc/iotedge/config.yaml
+    sed -i "210i\      username: \"${acrUsername}\"" /etc/iotedge/config.yaml
+    sed -i "211i\      password: \"${acrPassword}\"" /etc/iotedge/config.yaml
 fi
 
-echo "Configuring the bootstrapping edgeAgent to use AMQP/WS"
+#echo "Configuring the bootstrapping edgeAgent to use AMQP/WS"
 #sudo sed -i "205s|.*|  env:|" /etc/iotedge/config.yaml
 sudo sed -i "206i\#    UpstreamProtocol: \"AmqpWs\"" /etc/iotedge/config.yaml
 

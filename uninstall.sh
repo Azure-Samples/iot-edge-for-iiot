@@ -19,6 +19,9 @@ function show_help() {
    echo
 }
 
+#global variable
+scriptFolder=$(dirname "$(readlink -f "$0")")
+
 # Default settings / Initializing all option variables to avoid contamination by variables from the environment.
 iotHubResourceGroup=""
 iotHubName=""
@@ -105,66 +108,8 @@ subscription=$(az account show --query 'name' -o tsv)
 echo "Executing script with Azure Subscription: ${subscription}" 
 echo ""
 
-# Load IoT Edge VMs to configure from config file
-iotEdgeDevices=()
-iotEdgeDevicesSubnets=()
-iotEdgeParentDevices=()
-rootCA=""
-topLayerBaseDeploymentFilePath=""
-middleLayerBaseDeploymentFilePath=""
-bottomLayerBaseDeploymentFilePath=""
-
-while read line
-do
-    if [ "${line:0:1}" == "#" ]; then
-        continue
-    fi
-    if [ "${line:0:6}" == "RootCA" ]; then
-        rootCA=$(echo $line | cut -d ":" -f2-)
-        continue
-    fi
-    if [ "${line:0:30}" == "TopLayerBaseDeploymentFilePath" ]; then
-        topLayerBaseDeploymentFilePath=$(echo $line | cut -d ":" -f2-)
-        continue
-    fi
-    if [ "${line:0:33}" == "MiddleLayerBaseDeploymentFilePath" ]; then
-        middleLayerBaseDeploymentFilePath=$(echo $line | cut -d ":" -f2-)
-        continue
-    fi
-    if [ "${line:0:33}" == "BottomLayerBaseDeploymentFilePath" ]; then
-        bottomLayerBaseDeploymentFilePath=$(echo $line | cut -d ":" -f2-)
-        continue
-    fi
-    i=0
-    substrings=$(echo $line | tr ":" "\n")
-    for substring in ${substrings[@]}; do
-        if [ $i = 0 ]; then
-            subnet=$substring
-        else     
-            devices=$(echo $substring | tr " " "\n")
-            for deviceWithParent in ${devices[@]}; do
-                device=$(echo $deviceWithParent | cut -d "(" -f1)
-                parent=$(echo $deviceWithParent | cut -d "(" -f2 | cut -d ")" -f1)
-                if [[ ! "$parent" =~ ^(OPC-UA|OPCUA|OPC-UA-1|OPC-UA-2)$ ]]; then
-                    iotEdgeDevicesSubnets+=($subnet)
-                    iotEdgeDevices+=($device)
-                    if [[ $device == $parent ]]; then
-                        iotEdgeParentDevices+="IoTHub"
-                    else
-                        iotEdgeParentDevices+=($parent)
-                    fi
-                fi
-            done
-        fi
-        ((i++))
-    done
-done < $configFilePath
-
-if [ ${#iotEdgeDevicesSubnets[@]} -ne ${#iotEdgeDevices[@]} ] && [ ${#iotEdgeDevicesSubnets[@]} -ne ${#iotEdgeParentDevices[@]} ]
-then
-    echo "Error when parsing the configuration file. Please review the syntax of your configuration file."
-    exit 1
-fi
+# Parse the configuration file
+source ${scriptFolder}/scripts/parseConfigFile.sh $configFilePath
 
 echo "Deleting all IoT Edge devices listed in the configuration file from IoT Hub..."
 for (( i=0; i<${#iotEdgeDevices[@]}; i++))

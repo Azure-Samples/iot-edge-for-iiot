@@ -98,6 +98,20 @@ fi
 # Load IoT Edge VMs to deploy from config file
 source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
+# Verifying that the ACR environment variable file is here
+if [ -z $acrEnvFilePath ]; then
+    echo ".Env file with Azure Container Registry (ACR) credentials is missing from the configuration file. Please verify your configuration file. Exiting."
+    exit 1
+fi
+acrEnvFilePath="${scriptFolder}/$acrEnvFilePath"
+
+# Get ACR name
+source $acrEnvFilePath
+if [[ -z $ACR_ADDRESS || -z $ACR_USERNAME || -z $ACR_PASSWORD ]]; then
+    echo "One or more of ACR_ADDRESS, ACR_USERNAME or ACR_PASSWORD have empty values. Please verify your ACR.env file. Exiting."
+    exit 1
+fi
+
 echo "==========================================================="
 echo "==   Configuring certificates for IoT Edge devices       =="
 echo "==========================================================="
@@ -188,7 +202,7 @@ do
         --vm-name ${iotEdgeDevices[$i]} \
         --name customScript \
         --publisher Microsoft.Azure.Extensions \
-        --settings '{"fileUris": ["https://iotedgeforiiot.blob.core.windows.net/iotedge-vms-custom-scripts-public-preview/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'https_proxy=http://10.16.8.4:3128'\""}' \
+        --settings '{"fileUris": ["https://raw.githubusercontent.com/ebertrams/iotedge4iiot-e2e/master/scripts/CustomScripts/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'https_proxy=http://10.16.8.4:3128'\" \"'${ACR_ADDRESS}'\" \"'${ACR_USERNAME}'\" \"'${ACR_PASSWORD}'\""}' \
         --output none \
         --no-wait
     elif [ ${iotEdgeDevicesSubnets[i]} == "4-L3-OT-SiteOperations" ]; then
@@ -198,7 +212,7 @@ do
         --vm-name ${iotEdgeDevices[$i]} \
         --name customScript \
         --publisher Microsoft.Azure.Extensions \
-        --settings '{"fileUris": ["https://iotedgeforiiot.blob.core.windows.net/iotedge-vms-custom-scripts-public-preview/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'${iotEdgeParentDevicesIpAddresses[$i]}'\" \"'https_proxy=http://10.16.5.4:3128'\""}' \
+        --settings '{"fileUris": ["https://raw.githubusercontent.com/ebertrams/iotedge4iiot-e2e/master/scripts/CustomScripts/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'${iotEdgeParentDevicesIpAddresses[$i]}'\" \"'https_proxy=http://10.16.5.4:3128'\""}' \
         --output none \
         --no-wait
     else
@@ -208,7 +222,7 @@ do
         --vm-name ${iotEdgeDevices[$i]} \
         --name customScript \
         --publisher Microsoft.Azure.Extensions \
-        --settings '{"fileUris": ["https://iotedgeforiiot.blob.core.windows.net/iotedge-vms-custom-scripts-public-preview/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'${iotEdgeParentDevicesIpAddresses[$i]}'\""}' \
+        --settings '{"fileUris": ["https://raw.githubusercontent.com/ebertrams/iotedge4iiot-e2e/master/scripts/CustomScripts/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'${iotEdgeParentDevicesIpAddresses[$i]}'\""}' \
         --output none \
         --no-wait
     fi
