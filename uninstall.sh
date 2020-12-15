@@ -2,20 +2,19 @@
 
 function show_help() {
    # Display Help
-   echo "Run this delete resources used to simulate a Purdue Network with its assets, including IoT Edge devices created in IoT Hub"
+   echo "Run this script to delete resources used to simulate a Purdue Network and its assets, including IoT Edge devices created in IoT Hub."
    echo
-   echo "Syntax: ./install_default.sh [-flag=value]"
+   echo "Syntax: ./uninstall.sh [-flag=value]"
    echo ""
    echo "List of mandatory flags:"
-   echo "-rg        Prefix used for all new Azure Resource Groups created by this script."
-   echo "-hubrg            Azure Resource Group with the Azure IoT Hub"
-   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices"
+   echo "-hubrg     Azure Resource Group with the Azure IoT Hub."
+   echo "-hubname   Name of the Azure IoT Hub controlling the IoT Edge devices."
    echo ""
    echo "List of optional flags:"
    echo "-h         Print this help."
-   echo "-c         Path to configuration file with IoT Edge VMs information."
-   echo "-s         Azure subscription to use to deploy resources."
-   echo "-l         Azure region to deploy resources to."
+   echo "-c         Path to configuration file with IoT Edge VMs information. Default: ./config.txt."
+   echo "-s         Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
+   echo "-rg        Prefix used for all Azure Resource Groups created by the installation script. Default: iotedge4iiot."
    echo
 }
 
@@ -26,9 +25,7 @@ scriptFolder=$(dirname "$(readlink -f "$0")")
 iotHubResourceGroup=""
 iotHubName=""
 configFilePath="./config.txt"
-location="eastus"
 resourceGroupPrefix="iotedge4iiot"
-vmSize="Standard_D3_v2" #Standard_B1ms"
 
 while :; do
     case $1 in
@@ -55,12 +52,6 @@ while :; do
             ;;
         -hubname=)
             echo "Missing IoT Hub name. Exiting."
-            exit;;
-        -l=?*)
-            location=${1#*=}
-            ;;
-        -l=)
-            echo "Missing location. Exiting."
             exit;;
         -s=?*)
             subscription=${1#*=}

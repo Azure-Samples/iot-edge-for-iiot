@@ -4,11 +4,12 @@ function show_help() {
    # Display Help
    echo "Run this script to populate your Azure Container Registry (ACR) with required container images to use IoT Edge in nested configuration."
    echo
-   echo "Syntax: ./populate_acr.sh [-flag parameter]"
+   echo "Syntax: ./import_acr.sh [-flag parameter]"
    echo ""
    echo "List of optional flags:"
-   echo "-h                Print this help."
-   echo "-c                Path to configuration file with path to file with ACR credentials information."
+   echo "-h      Print this help."
+   echo "-c      Path to configuration file with path to file with ACR credentials information. Default: ../config.txt."
+   echo "-s      Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
    echo
 }
 

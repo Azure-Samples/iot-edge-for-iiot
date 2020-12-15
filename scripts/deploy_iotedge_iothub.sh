@@ -7,13 +7,13 @@ function show_help() {
    echo "Syntax: ./deploy_iotedge_iothub.sh [-flag parameter]"
    echo ""
    echo "List of mandatory flags:"
-   echo "-hubrg            Azure Resource Group with the Azure IoT Hub controlling IoT Edge devices"
-   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices"
+   echo "-hubrg            Azure Resource Group with the Azure IoT Hub controlling IoT Edge devices."
+   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices."
    echo ""
    echo "List of optional flags:"
    echo "-h                Print this help."
-   echo "-c                Path to configuration file with IoT Edge VMs information."
-   echo "-s                Azure subscription where resources have been deployed"
+   echo "-c                Path to configuration file with IoT Edge VMs information. Default: ../config.txt."
+   echo "-s                Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
    echo
 }
 
