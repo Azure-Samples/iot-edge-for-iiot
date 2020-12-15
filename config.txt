@@ -4,7 +4,7 @@
 # - Do not modify the network layers (subnets) names as they must map to the ISA-95 network
 # - For each network layer, specify a list of IoT Edge devices or IIOT assets to certificates separated by white spaces
 # - Each IoT Edge device or IIOT asset will run in an Azure VM
-# - IIOT assets are differianted by IoT Edge devices by the value in parenthesis after their names:
+# - IIOT assets are differantiated from IoT Edge devices by the value in parenthesis after their names:
 #     - If set to OPC-UA or OPC-UA-1, an OPC-UA server is simulated with configuration 1. Ex: L2-OPC-UA-server-1(OPC-UA)
 #     - If set to OPC-UA-2, an OPC-UA server is simulated with configuration 2. L2-OPC-UA-server-2(OPC-UA-2)
 #     - For every other value or no value between parenthesis, an IoT Edge device is created
@@ -31,7 +31,8 @@
 # 3-L2-OT-AreaSupervisoryControl: L2-OPC-UA-server-1(OPC-UA)
 
 # IoT Edge configuration
-TopLayerBaseDeploymentFilePath: ./edgeDeployments/topLayerBaseDeploymentItProxy.json
+AcrEnvFilePath: ../ACR.env
+TopLayerBaseDeploymentTemplateFilePath: ./edgeDeployments/topLayerBaseDeploymentItProxy.template.json
 MiddleLayerBaseDeploymentFilePath: ./edgeDeployments/middleLayerBaseDeployment.json
 BottomLayerBaseDeploymentFilePath: ./edgeDeployments/bottomLayerBaseDeploymentOtProxy.json
-RootCA: https://iotedgeforiiot.blob.core.windows.net/test-certificates/test-certs.tar.bz2
+RootCA: https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/assets/test-certs.tar.bz2

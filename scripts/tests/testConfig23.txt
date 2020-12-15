@@ -27,7 +27,8 @@
 1-L0-OT-Process:
 
 # IoT Edge configuration
-TopLayerBaseDeploymentFilePath: ./edgeDeployments/topLayerBaseDeploymentItProxy.json
+AcrEnvFilePath: ../ACR.env
+TopLayerBaseDeploymentTemplateFilePath: ./edgeDeployments/topLayerBaseDeploymentItProxy.template.json
 MiddleLayerBaseDeploymentFilePath: ./edgeDeployments/middleLayerBaseDeployment.json
 BottomLayerBaseDeploymentFilePath: ./edgeDeployments/bottomLayerBaseDeploymentOtProxy.json
-RootCA: https://iotedgeforiiot.blob.core.windows.net/test-certificates/test-certs.tar.bz2
+RootCA: https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/assets/test-certs.tar.bz2
