@@ -7,7 +7,8 @@ iotEdgeDevicesSubnets=()
 iotEdgeParentDevices=()
 iiotAssets=()
 iiotAssetsSubnets=()
-topLayerBaseDeploymentFilePath=""
+acrEnvFilePath=""
+topLayerBaseDeploymentTemplateFilePath=""
 middleLayerBaseDeploymentFilePath=""
 bottomLayerBaseDeploymentFilePath=""
 rootCA=""
@@ -17,8 +18,12 @@ do
     if [ "${line:0:1}" == "#" ]; then
         continue
     fi
-    if [ "${line:0:30}" == "TopLayerBaseDeploymentFilePath" ]; then
-        topLayerBaseDeploymentFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
+    if [ "${line:0:14}" == "AcrEnvFilePath" ]; then
+        acrEnvFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
+        continue
+    fi
+    if [ "${line:0:38}" == "TopLayerBaseDeploymentTemplateFilePath" ]; then
+        topLayerBaseDeploymentTemplateFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
         continue
     fi
     if [ "${line:0:33}" == "MiddleLayerBaseDeploymentFilePath" ]; then

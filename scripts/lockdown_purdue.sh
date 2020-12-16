@@ -4,12 +4,12 @@ function show_help() {
    # Display Help
    echo "Run this script to lockdown the Purdue Network. Each layers will then only have access to adjacent north and south layers."
    echo
-   echo "Syntax: ./deploy_iotedge_vms.sh [-flag parameter]"
+   echo "Syntax: ./lockdown_purdue.sh [-flag parameter]"
    echo "-nrg              Azure Resource Group with the Purdue Network."
    echo ""
    echo "List of optional flags:"
    echo "-h                Print this help."
-   echo "-s                Azure subscription to use to deploy resources."
+   echo "-s                Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
    echo ""
 }
 
