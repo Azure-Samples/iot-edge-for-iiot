@@ -3,25 +3,27 @@
 # Parsing arguments
 
 dcs=$1
-fqdn=$2
-if [ $# -eq 6 ]; then
+deviceId=$2
+fqdn=$3
+if [ $# -eq 7 ]; then
     #top layer with proxy and ACR
-    proxySettings=$3
-    acrAddress=$4
-    acrUsername=$5
-    acrPassword=$6
-elif [ $# -eq 4 ]; then
-    #middle or bottom layer with proxy
-    parentFqdn=$3
     proxySettings=$4
+    acrAddress=$5
+    acrUsername=$6
+    acrPassword=$7
+elif [ $# -eq 5 ]; then
+    #middle or bottom layer with proxy
+    parentFqdn=$4
+    proxySettings=$5
 else
     #middle or bottom layer
-    parentFqdn=$3
+    parentFqdn=$4
 fi
 
 # Validating parameters
 echo "Executing script with parameters:"
 echo "- Device connection string: ${dcs}"
+echo "- Device Id: ${deviceId}"
 echo "- FQDN: ${fqdn}"
 echo "- Parent FQDN: ${parentFqdn}"
 echo "- ProxySettings: ${proxySettings}"
@@ -29,11 +31,15 @@ echo "- ACR address: ${acrAddress}"
 echo "- ACR username: ${acrUsername}"
 echo "- ACR password: ${acrPassword}"
 echo ""
-if [ -z $1 ]; then
+if [ -z ${dcs} ]; then
     echo "Missing device connection string. Please pass a device connection string as a primary parameter. Exiting."
     exit 1
 fi
-if [ -z $2 ]; then
+if [ -z ${deviceId} ]; then
+    echo "Missing device Fully Domain Qualified Name (FQDN). Please pass a FQDN as a secondary parameter. Exiting."
+    exit 1
+fi
+if [ -z ${fqdn} ]; then
     echo "Missing device Fully Domain Qualified Name (FQDN). Please pass a FQDN as a secondary parameter. Exiting."
     exit 1
 fi
@@ -50,7 +56,22 @@ while [[ ! -f "$iotedgeConfigFile" ]]; do
         exit 1
    fi
 done
-echo "Installation of IoT Edge is complete. Starting its configuration."
+echo "Installation of IoT Edge is complete."
+echo ""
+
+# Waiting for installation of certificates to be complete
+i=0
+deviceCaCertFile="/certs/certs/certs/iot-edge-device-$deviceId-full-chain.cert.pem"
+while [[ ! -f "$deviceCaCertFile" ]]; do
+    echo "Waiting 10s for installation of certificates to complete"
+    sleep 10
+    ((i++))
+    if [ $i -gt 30 ]; then
+        echo "Something went wrong in the installation of certificates. Please install certificates first. Exiting."
+        exit 1
+   fi
+done
+echo "Installation of certificates is complete. Starting configuration of the IoT Edge device."
 echo ""
 
 # Configuring IoT Edge
