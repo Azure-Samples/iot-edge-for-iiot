@@ -7,13 +7,13 @@ function show_help() {
    echo "Syntax: ./deploy_iotedge_iothub.sh [-flag parameter]"
    echo ""
    echo "List of mandatory flags:"
-   echo "-hubrg            Azure Resource Group with the Azure IoT Hub controlling IoT Edge devices"
-   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices"
+   echo "-hubrg            Azure Resource Group with the Azure IoT Hub controlling IoT Edge devices."
+   echo "-hubname          Name of the Azure IoT Hub controlling the IoT Edge devices."
    echo ""
    echo "List of optional flags:"
    echo "-h                Print this help."
-   echo "-c                Path to configuration file with IoT Edge VMs information."
-   echo "-s                Azure subscription where resources have been deployed"
+   echo "-c                Path to configuration file with IoT Edge VMs information. Default: ../config.txt."
+   echo "-s                Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
    echo
 }
 
@@ -101,7 +101,9 @@ fi
 # Parse the configuration file
 source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
-topLayerBaseDeploymentFilePath="${scriptFolder}/$topLayerBaseDeploymentFilePath"
+acrEnvFilePath="${scriptFolder}/$acrEnvFilePath"
+topLayerBaseDeploymentTemplateFilePath="${scriptFolder}/$topLayerBaseDeploymentTemplateFilePath"
+topLayerBaseDeploymentFilePath="${topLayerBaseDeploymentTemplateFilePath/.template/}"
 middleLayerBaseDeploymentFilePath="${scriptFolder}/$middleLayerBaseDeploymentFilePath"
 bottomLayerBaseDeploymentFilePath="${scriptFolder}/$bottomLayerBaseDeploymentFilePath"
 
@@ -110,21 +112,46 @@ echo "==   Pushing base deployment to all IoT Edge devices     =="
 echo "==========================================================="
 echo ""
 
-#Verifying that the deployment manifest files are here
-if [ -z $topLayerBaseDeploymentFilePath ]; then
-    echo "TopLayerBaseDeploymentFilePath is missing from the configuration file. Please verify your configuration file. Exiting."
+# Verifying that the deployment manifest files are here
+if [ -z $acrEnvFilePath ]; then
+    echo ".Env file with Azure Container Registry (ACR) credentials is missing from the configuration file. Please verify your configuration file. Exiting."
     exit 1
 fi
-if [ -z $bottomLayerBaseDeploymentFilePath ]; then
+if [ -z $topLayerBaseDeploymentTemplateFilePath ]; then
+    echo "TopLayerBaseDeploymentTemplateFilePath is missing from the configuration file. Please verify your configuration file. Exiting."
+    exit 1
+fi
+if [ -z $topLayerBaseDeploymentFilePath ]; then
     echo "BottomLayerBaseDeploymentFilePath is missing from the configuration file. Please verify your configuration file. Exiting."
     exit 1
 fi
-if [ ! -f $topLayerBaseDeploymentFilePath ]; then
+if [ ! -f $middleLayerBaseDeploymentFilePath ]; then
     echo "topLayerBaseDeployment manifest file not found. Make sure that the reference from the configuration file is correct. Exiting."
     exit 1
 fi
 if [ ! -f $bottomLayerBaseDeploymentFilePath ]; then
     echo "bottomLayerBaseDeployment manifest file not found. Make sure that the reference from the configuration file is correct. Exiting."
+    exit 1
+fi
+
+# Generate top layer base deployment with ACR credentials from template
+source $acrEnvFilePath
+if [ -z $ACR_ADDRESS ]; then
+    echo "ACR_ADDRESS value is missing. Please verify your ACR.env file. Exiting."
+    exit 1
+fi
+if [ -z $ACR_USERNAME ]; then
+    echo "ACR_USERNAME value is missing. Please verify your ACR.env file. Exiting."
+    exit 1
+fi
+if [ -z $ACR_PASSWORD ]; then
+    echo "ACR_PASSWORD value is missing. Please verify your ACR.env file. Exiting."
+    exit 1
+fi
+export ACR_ADDRESS ACR_USERNAME ACR_PASSWORD
+${scriptFolder}/replaceEnv.sh $topLayerBaseDeploymentTemplateFilePath $topLayerBaseDeploymentFilePath 'ACR_ADDRESS' 'ACR_USERNAME' 'ACR_PASSWORD'
+if [ -z $topLayerBaseDeploymentFilePath ]; then
+    echo "TopLayerBaseDeploymentFilePath is missing. It has not been generated properly from its template. Exiting."
     exit 1
 fi
 
