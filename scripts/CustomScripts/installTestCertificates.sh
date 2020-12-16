@@ -40,7 +40,7 @@ cd ./certs
 sudo cp azure-iot-test-only.root.ca.cert.pem /usr/local/share/ca-certificates/azure-iot-test-only.root.ca.cert.pem.crt
 sudo update-ca-certificates
 
-echo "Updating IoT Edge configuration file to use the newly installed certificcates"
+echo "Updating IoT Edge configuration file to use the newly installed certificates"
 device_ca_cert_path="/certs/certs/certs/iot-edge-device-$deviceId-full-chain.cert.pem"
 device_ca_pk_path="/certs/certs/private/iot-edge-device-$deviceId.key.pem"
 trusted_ca_certs_path="/certs/certs/certs/azure-iot-test-only.root.ca.cert.pem"
