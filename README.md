@@ -105,7 +105,7 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
 
 - Monitor your deployment. For each IoT Edge device, verify that after a couple of minutes all their modules are in `runningStatus` reported as `running`. Either by looking at your IoT Edge devices in t[he Azure portal](https://ms.portal.azure.com/?feature.canmodifystamps=true&Microsoft_Azure_Iothub=development#home) or by running the following Azure CLI command:
 
-    ```
+    ```bash
     az iot hub module-twin show --device-id <edge_device_id> --module-id '$edgeAgent' --hub-name <iot_hub_name> --query "properties.reported.[systemModules, modules]"
     ```
 
@@ -159,13 +159,72 @@ Note: The Simulated Temperature Sensor only sends 500 messages by default. To ch
 
 In this sample, you've created a hierarchy of IoT Edge devices across a Purdue network organized in hierarchical layers where only the top layer has connectivity to the cloud and the lower layers in the hierarchy can only communicate with adjacent north and south layers. Then, you've remotely deployed the **Simulated Temperature Sensor** module that sends simulated data from the lowest layer.
 
-To view thi simulated data makes its way through the device hierarchy all the way up to the cloud, start monitoring the messages received by the cloud coming from the device in your lowest layer `L3-edge`. From the [Azure Cloud Shell](https://shell.azure.com/):
+To view this simulated data making its way through the device hierarchy all the way up to the cloud, start monitoring the messages received by the cloud coming from the device in your lowest layer `L3-edge`. From the [Azure Cloud Shell](https://shell.azure.com/):
 
 ```bash
 az iot hub monitor-events -n <iothub_name> -d L3-edge
 ```
 
 ![View output of simulated temperature sensor in IoT Hub](./assets/SimulatedTempSensorOutput.png)
+
+## Simulate an internet outage
+
+Let's simulate an internet outage. To do that, we'll disconnect the IoT Edge devices in the top layer (L5) from the internet by setting up a network firewall rule.
+
+From the [Azure Cloud Shell](https://shell.azure.com/), launch the `goOffline` script with the parameters below. The name of your network resource group is made of your resource group prefix given above appended with the string "-RG-network":
+
+```bash
+./goOffline.sh -b=true -nrg=<name_network_resource_group> -hubname=<iot_hub_name>
+```
+
+Once the script has completed, all IoT Edge devices in the top layer no longer are connected to the internet. Please allow a minute or two for each edgeHub to restart, which is required to apply the network changes.
+
+To verify that messages are no longer being received by IoT Hub, look at the monitoring job set up in the previous section and observe that no more messages are being received.
+
+Let's now assume that the outage is resolved and that the IoT Edge devices in the top layer can go back online. From the [Azure Cloud Shell](https://shell.azure.com/):
+
+```bash
+./goOffline.sh -b=false -nrg=<name_network_resource_group> -hubname=<iot_hub_name>
+```
+
+After a couple of minutes, observe that the messages accumulated by IoT Edge devices in the top layer while offline are now being received by IoT Hub by looking at the monitoring job set up in the previous section.
+
+![View output of simulated temperature sensor in IoT Hub](./assets/SimulatedTempSensorOuputAfterOutage.png)
+
+## Troubleshoot
+
+The same troubleshooting guidelines to [diagnoze issues for single IoT Edge node](https://docs.microsoft.com/en-us/azure/iot-edge/troubleshoot) or [resolve common errors](https://docs.microsoft.com/en-us/azure/iot-edge/troubleshoot-common-errors) are applicable. Below are some extra tips specific to nested IoT Edge devices.
+
+### Twin reported properties
+
+You can verify the proper set up of the installation by monitoring the edgeAgent module twin as described in [this tutorial](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-monitor-module-twins). To get the latest edgeAgent module twin, run the following command from the [Azure Cloud Shell](https://shell.azure.com/):
+
+```bash
+az iot hub module-twin show --device-id <edge_device_id> --module-id '$edgeAgent' --hub-name <iot_hub_name> --query "properties.reported.[systemModules, modules]"
+```
+
+This command will output all the edgeAgent [reported properties](https://docs.microsoft.com/en-us/azure/iot-edge/module-edgeagent-edgehub). Here are some helpful ones to monitor the status of the device: *runtime status*, *runtime start time*, *runtime last exit time*, *runtime restart count*.
+
+### Ping direct method
+
+Once a device has been setup properly on the network, they can regularly query its status by pinging it. To do so, they can use [this ping directMethod](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-edgeagent-direct-method#ping).
+
+### Run the `check` command
+
+If you have an SSH connection open on a device, you can run the `iotedge check` command documented [here](https://docs.microsoft.com/en-us/azure/iot-edge/troubleshoot#run-the-check-command).
+
+This check tool runs a connectivity check and will give warning in case there is an issue. For devices in lower layers, you need to specify where can the `iotedge check` tool find the `diagnostics` container image by using the following parameter:
+
+```bash
+sudo iotedge check --diagnostics-image-name azureiotedge-diagnostics:1.2.0-rc2
+```
+
+### Collect logs
+
+To look at a device logs, you can:
+
+- *If the device has connectivity to IoT Hub*: Remotely pull all the containers logs of a device by summoning the `UploadLogs` direct method per [these instructions](https://github.com/Azure/iotedge/blob/master/doc/built-in-logs-pull.md).
+- *If the device does not connectivity to IoT Hub*: SSH into the IoT Edge VM and collect all available IoT Edge logs from that device by running the `iotedge support-bundle` command on the device. [Full instructions available here](https://docs.microsoft.com/en-us/azure/iot-edge/troubleshoot#gather-debug-information-with-support-bundle-command).
 
 ## Clean up
 
@@ -174,6 +233,8 @@ To clean up all the resources that you've deployed in Azure including the IoT Ed
 ```bash
 ./uninstall.sh -rg=<resource_group_prefix> -hubrg=<iothub_resource_group> -hubname=<iothub_name>
 ```
+
+Note that container images automatically copied with the installation script are still part of your Azure Container Registry (ACR).
 
 ## Contributing
 

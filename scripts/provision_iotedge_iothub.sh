@@ -82,8 +82,6 @@ fi
 # subscriptionName=$(az account show --query 'name' -o tsv)
 # echo "Executing script with Azure Subscription: ${subscriptionName}" 
 
-# Parse the configuration file
-
 # Load IoT Edge devices to create in IoT Hub from config file
 source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
