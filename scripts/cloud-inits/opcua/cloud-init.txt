@@ -28,35 +28,9 @@ apt:
 packages:
   - moby-engine
   - moby-cli
-write_files:
-  - path: /etc/opcua/nodesfile.json
-    owner: root:root
-    permissions: '0644'
-    content: |
-      {
-        "Folder": "MyTelemetry",
-        "NodeList": [
-          {
-            "NodeId": 1023,
-            "Name": "ActualSpeed",
-            "Description": "Rotational speed"
-          },
-          {
-            "NodeId": "aRMS"
-          },
-          {
-            "NodeId": "1025",
-            "Name": "DKW",
-            "DataType": "Float",
-            "ValueRank": -1,
-            "AccessLevel": "CurrentReadOrWrite",
-            "Description": "Diagnostic characteristic value"
-          }
-        ]
-      }
 runcmd:
   - |
       set -x
       (
-        docker run --rm -p 50000:50000 -p 8080:8080 --name opcplc -v /app:/etc/opcua mcr.microsoft.com/iotedge/opc-plc:latest --nodesfile nodesfile.json
+        docker run -p 54845:54845 -p 54855:54855 -p 1880:1880 --name opcsimulator onderyildirim/opcsimulator:0.1.50.0-amd64
       ) &

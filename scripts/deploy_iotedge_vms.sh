@@ -155,6 +155,7 @@ echo ""
 # Load IoT Edge VMs to deploy from config file
 source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
+#Deploy IoT Edge VMs
 iotedgeDeployFilePath="${scriptFolder}/ARM-templates/iotedgedeploy.json"
 if [ ! -z $adminPassword ]; then
     iotedgeVMsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iotedgeResourceGroupName --template-file "$iotedgeDeployFilePath" --parameters \

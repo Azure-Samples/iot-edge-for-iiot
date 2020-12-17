@@ -139,7 +139,7 @@ fi
 # echo "Executing script with Azure Subscription: ${subscriptionName}" 
 
 echo "==========================================================="
-echo "==	                IIOT assets                  =="
+echo "==	                  IIOT assets                    =="
 echo "==========================================================="
 echo ""
 
@@ -152,24 +152,25 @@ else
 fi
 echo ""
 
-# Load IIoT Assets to deploy from config file
+# Load IIOT assets to deploy from config file
 source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
-#Create IIOT assets
+#Deploy IIOT assets
+opcuaDeployFilePath="${scriptFolder}/ARM-templates/opcuadeploy.json"
 if [ ! -z $adminPassword ]; then
-    iiotAssetsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iiotAssetsResourceGroupName --template-file ./ARM-templates/opcuadeploy.json --parameters \
-        networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM ${iiotAssetsSubnets[@]})" \
-        machineNames="$(passArrayToARM ${iiotAssets[@]})" machineAdminName="$adminUsername" machineAdminPassword="$adminPassword" vmSize="$vmSize" \
+    iiotAssetsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iiotAssetsResourceGroupName --template-file "$opcuaDeployFilePath" --parameters \
+        networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM "${iiotAssetsSubnets[@]}")" \
+        machineNames="$(passArrayToARM "${iiotAssets[@]}")" machineAdminName="$adminUsername" machineAdminPassword="$adminPassword" vmSize="$vmSize" \
         --query "properties.outputs.vms.value[].[iiotAssetMachineName, iiotAssetMachinePrivateIPAddress, iiotAssetAdminUsername, iiotAssetAdminPassword]" -o tsv)
 else
-    iiotAssetsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iiotAssetsResourceGroupName --template-file ./ARM-templates/opcuadeploy.json --parameters \
-        networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM ${iiotAssetsSubnets[@]})" \
-        machineNames="$(passArrayToARM ${iiotAssets[@]})" machineAdminName="$adminUsername" vmSize="$vmSize" \
+    iiotAssetsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iiotAssetsResourceGroupName --template-file "$opcuaDeployFilePath" --parameters \
+        networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM "${iiotAssetsSubnets[@]}")" \
+        machineNames="$(passArrayToARM "${iiotAssets[@]}")" machineAdminName="$adminUsername" vmSize="$vmSize" \
         --query "properties.outputs.vms.value[].[iiotAssetMachineName, iiotAssetMachinePrivateIPAddress, iiotAssetAdminUsername, iiotAssetAdminPassword]" -o tsv)
 fi
 
 echo "IIOT assets created. Key values:"
-
+echo ""
 iiotAssetsOutputs=($iiotAssetsOutput)
 for (( i=0; i<${#iiotAssetsOutputs[@]}-1; i+=4))
 do

@@ -128,7 +128,7 @@ echo ""
 
 
 ./scripts/deploy_purdue.sh -s=$subscription -l=$location -rg=$resourceGroupPrefix -vmSize=$vmSize
-#./scripts/deploy_iiotassets.sh -s=$subscription -l=$location -rg=$resourceGroupPrefix -vmSize=$vmSize 
+./scripts/deploy_iiotassets.sh -s=$subscription -l=$location -rg=$resourceGroupPrefix -vmSize=$vmSize 
 ./scripts/deploy_iotedge_vms.sh -s=$subscription -l=$location -rg=$resourceGroupPrefix -vmSize=$vmSize
 ./scripts/provision_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName
 ./scripts/configure_iotedge_vms.sh -s=$subscription -edgerg=$iotedgeResourceGroupName -hubrg=$iotHubResourceGroup -hubname=$iotHubName
