@@ -67,7 +67,7 @@ while :; do
             echo "Missing subscription. Exiting."
             exit;;
         -hubname=?*)
-            iotHubName=${1#*=}
+            hubName=${1#*=}
             ;;
         -hubname=)
             echo "Missing IoT Hub name. Exiting."
@@ -93,7 +93,7 @@ if [ -z $networkResourceGroupName ]; then
     echo "Missing network resource group. Exiting."
     exit 1
 fi
-if [ -z $hubname ]; then
+if [ -z $hubName ]; then
     echo "Missing IoT Hub name. Exiting."
     exit 1
 fi
@@ -110,7 +110,7 @@ source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
 
 echo "==========================================================="
-echo "==	    Simulating Internet Connectivity           	  =="
+echo "==	    Simulating Internet Connectivity          	  =="
 echo "==========================================================="
 
 echo ""
@@ -165,7 +165,7 @@ if [ ${button} = true ]; then
     echo ""
 fi
 
-if [ ${boolean} = "on" ]; then
+if [ ${button} = true ]; then
     echo "All IoT Edge devices in the top layer (L5) are now offline and cannot communicate with the internet."
 else
     echo "All IoT Edge devices in the top layer (L5) are now online and can communicate with the internet."
