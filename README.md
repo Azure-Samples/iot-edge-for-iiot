@@ -174,7 +174,7 @@ Let's simulate an internet outage. To do that, we'll disconnect the IoT Edge dev
 From the [Azure Cloud Shell](https://shell.azure.com/), launch the `goOffline` script with the parameters below. The name of your network resource group is made of your resource group prefix given above appended with the string "-RG-network":
 
 ```bash
-./goOffline.sh -b=true -nrg=<name_network_resource_group> -hubname=<iot_hub_name>
+./scripts/goOffline.sh -b=true -nrg=<name_network_resource_group> -hubname=<iot_hub_name>
 ```
 
 Once the script has completed, all IoT Edge devices in the top layer no longer are connected to the internet. Please allow a minute or two for each edgeHub to restart, which is required to apply the network changes.
@@ -184,7 +184,7 @@ To verify that messages are no longer being received by IoT Hub, look at the mon
 Let's now assume that the outage is resolved and that the IoT Edge devices in the top layer can go back online. From the [Azure Cloud Shell](https://shell.azure.com/):
 
 ```bash
-./goOffline.sh -b=false -nrg=<name_network_resource_group> -hubname=<iot_hub_name>
+./scripts/goOffline.sh -b=false -nrg=<name_network_resource_group> -hubname=<iot_hub_name>
 ```
 
 After a couple of minutes, observe that the messages accumulated by IoT Edge devices in the top layer while offline are now being received by IoT Hub by looking at the monitoring job set up in the previous section.
