@@ -1,0 +1,34 @@
+{
+    "modulesContent": {
+        "$edgeAgent": {
+            "properties.desired.runtime.settings.registryCredentials.dashboardCR": {
+                "address": "#ACR_ADDRESS#",
+                "password": "#ACR_PASSWORD#",
+                "username": "#ACR_USERNAME#"
+            },
+            "properties.desired.modules.sqledge": {
+                "settings": {
+                    "image": "#MODULES.sqledge#",
+                    "createOptions": "{\"HostConfig\":{\"CapAdd\":[\"SYS_PTRACE\"],\"Binds\":[\"sqlvolume:\/sqlvolume\"],\"PortBindings\":{\"1433\/tcp\":[{\"HostPort\":\"1877\"}]},\"Mounts\":[{\"Type\":\"volume\",\"Source\":\"sqlvolume\",\"Target\":\"\/var\/opt\/mssql\"}]},\"User\":\"0:0\",\"Env\":[\"MSSQL_AGENT_ENABLED=TRUE\",\"ClientTransportType=AMQP_TCP_Only\",\"MSSQL_PID=Premium\",\"ACCEPT_EULA=Y\",\"MSSQL_LCID=1033\",\"MSSQL_COLLATION=SQL_Latin1_General_CP1_CI_AS\",\"SA_PASSWORD=#SQLEDGE_ADMIN_PASSWORD#\"]}"
+                },
+                "type": "docker",
+                "status": "running",
+                "restartPolicy": "always",
+                "version": "1.0"
+            },
+            "properties.desired.modules.grafana": {
+                "settings": {
+                    "image": "#MODULES.grafana#",
+                    "createOptions": "{\"Env\":[\"GF_SECURITY_ADMIN_PASSWORD=#GRAFANA_ADMIN_PASSWORD#\"],\"Volumes\":{\"\/etc\/grafana\/provisioning\":{}},\"HostConfig\":{\"PortBindings\":{\"3000\/tcp\":[{\"HostPort\":\"3000\"}]}}}"
+                },
+                "type": "docker",
+                "status": "running",
+                "restartPolicy": "always",
+                "version": "1.0"
+            }
+        },
+        "$edgeHub": {
+            "properties.desired.routes.opc": "FROM /messages/* INTO BrokeredEndpoint(\"/modules/sqledge/inputs/OPCUAData\")"
+        }
+    }
+}

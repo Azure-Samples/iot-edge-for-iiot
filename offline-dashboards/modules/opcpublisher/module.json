@@ -1,0 +1,15 @@
+{
+    "$schema-version": "0.0.1",
+    "description": "opcpublisher",
+    "image": {
+        "repository": "${ACR_ADDRESS}/${ACR_REPOSITORY}/opcpublisher",
+        "tag": {
+            "version": "${CONTAINER_VERSION_TAG}",
+            "platforms": {
+                "amd64": "./Dockerfile"
+            }
+        },
+        "buildOptions": [],
+        "contextPath": "./"
+    }
+}

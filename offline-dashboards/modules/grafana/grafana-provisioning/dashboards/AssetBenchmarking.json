@@ -1,0 +1,969 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 7,
+  "iteration": 1596556548764,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 16,
+      "panels": [],
+      "repeat": "Asset",
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01",
+          "value": "urn:b34554f03649:OPC-Site-01"
+        }
+      },
+      "title": "[[Asset]]",
+      "type": "row"
+    },
+    {
+      "datasource": "IOTDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a1414a",
+                "value": null
+              },
+              {
+                "color": "#f2a104",
+                "value": 0.9
+              },
+              {
+                "color": "#00743f",
+                "value": 0.95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.0",
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01",
+          "value": "urn:b34554f03649:OPC-Site-01"
+        }
+      },
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "rawSql": "select [time],[Availability] from GetAvailability($__timeFrom(), $__timeTo(), $Asset, 0)",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Availability",
+      "type": "stat"
+    },
+    {
+      "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>X</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+      "datasource": "InfluxDB",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 2,
+        "x": 4,
+        "y": 1
+      },
+      "id": 9,
+      "mode": "html",
+      "options": {
+        "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>X</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "7.1.0",
+      "repeat": null,
+      "repeatDirection": "v",
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01",
+          "value": "urn:b34554f03649:OPC-Site-01"
+        }
+      },
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    },
+    {
+      "datasource": "IOTDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a1414a",
+                "value": null
+              },
+              {
+                "color": "#f2a104",
+                "value": 0.9
+              },
+              {
+                "color": "#00743f",
+                "value": 0.95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 6,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.0",
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01",
+          "value": "urn:b34554f03649:OPC-Site-01"
+        }
+      },
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "rawSql": "select [time],[Quality] from GetQuality($__timeFrom(), $__timeTo(), $Asset, 0)",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Quality",
+      "type": "stat"
+    },
+    {
+      "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>X</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+      "datasource": "InfluxDB",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 2,
+        "x": 10,
+        "y": 1
+      },
+      "id": 10,
+      "mode": "html",
+      "options": {
+        "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>X</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "7.1.0",
+      "repeatDirection": "v",
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01",
+          "value": "urn:b34554f03649:OPC-Site-01"
+        }
+      },
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    },
+    {
+      "datasource": "IOTDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a1414a",
+                "value": null
+              },
+              {
+                "color": "#f2a104",
+                "value": 0.9
+              },
+              {
+                "color": "#00743f",
+                "value": 0.95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.0",
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01",
+          "value": "urn:b34554f03649:OPC-Site-01"
+        }
+      },
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "rawSql": "select [time],[Performance] from GetPerformance($__timeFrom(), $__timeTo(), $Asset,$idealRunrate, 0)",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Performance",
+      "type": "stat"
+    },
+    {
+      "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>=</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+      "datasource": "InfluxDB",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 2,
+        "x": 16,
+        "y": 1
+      },
+      "id": 12,
+      "mode": "html",
+      "options": {
+        "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>=</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "7.1.0",
+      "repeat": null,
+      "repeatDirection": "v",
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01",
+          "value": "urn:b34554f03649:OPC-Site-01"
+        }
+      },
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "IOTDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "displayName": "",
+          "mappings": [
+            {
+              "id": 0,
+              "op": "=",
+              "text": "N/A",
+              "type": 1,
+              "value": "null"
+            }
+          ],
+          "nullValueMode": "connected",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a1414a",
+                "value": null
+              },
+              {
+                "color": "#f2a104",
+                "value": 0.8
+              },
+              {
+                "color": "#00743f",
+                "value": 0.9
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 14,
+      "links": [],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.0",
+      "repeat": null,
+      "repeatDirection": "v",
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01",
+          "value": "urn:b34554f03649:OPC-Site-01"
+        }
+      },
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "rawSql": "select a.[time],[Availability]*[Quality]*[Performance] as OEE \nfrom GetAvailability($__timeFrom(), $__timeTo(), $Asset, 0) a \njoin GetQuality($__timeFrom(), $__timeTo(), $Asset, 0) q on (a.[time]=q.[time])\njoin GetPerformance($__timeFrom(), $__timeTo(), $Asset, $idealRunrate, 0) p on (a.[time]=p.[time])\n",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "OEE",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 17,
+      "panels": [],
+      "repeat": null,
+      "repeatIteration": 1596556548764,
+      "repeatPanelId": 16,
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-02",
+          "value": "urn:b34554f03649:OPC-Site-02"
+        }
+      },
+      "title": "[[Asset]]",
+      "type": "row"
+    },
+    {
+      "datasource": "IOTDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a1414a",
+                "value": null
+              },
+              {
+                "color": "#f2a104",
+                "value": 0.9
+              },
+              {
+                "color": "#00743f",
+                "value": 0.95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 0,
+        "y": 9
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.0",
+      "repeatIteration": 1596556548764,
+      "repeatPanelId": 2,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-02",
+          "value": "urn:b34554f03649:OPC-Site-02"
+        }
+      },
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "rawSql": "select [time],[Availability] from GetAvailability($__timeFrom(), $__timeTo(), $Asset, 0)",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Availability",
+      "type": "stat"
+    },
+    {
+      "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>X</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+      "datasource": "InfluxDB",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 2,
+        "x": 4,
+        "y": 9
+      },
+      "id": 19,
+      "mode": "html",
+      "options": {
+        "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>X</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "7.1.0",
+      "repeat": null,
+      "repeatDirection": "v",
+      "repeatIteration": 1596556548764,
+      "repeatPanelId": 9,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-02",
+          "value": "urn:b34554f03649:OPC-Site-02"
+        }
+      },
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    },
+    {
+      "datasource": "IOTDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a1414a",
+                "value": null
+              },
+              {
+                "color": "#f2a104",
+                "value": 0.9
+              },
+              {
+                "color": "#00743f",
+                "value": 0.95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 6,
+        "y": 9
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.0",
+      "repeatIteration": 1596556548764,
+      "repeatPanelId": 4,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-02",
+          "value": "urn:b34554f03649:OPC-Site-02"
+        }
+      },
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "rawSql": "select [time],[Quality] from GetQuality($__timeFrom(), $__timeTo(), $Asset, 0)",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Quality",
+      "type": "stat"
+    },
+    {
+      "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>X</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+      "datasource": "InfluxDB",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 2,
+        "x": 10,
+        "y": 9
+      },
+      "id": 21,
+      "mode": "html",
+      "options": {
+        "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>X</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "7.1.0",
+      "repeatDirection": "v",
+      "repeatIteration": 1596556548764,
+      "repeatPanelId": 10,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-02",
+          "value": "urn:b34554f03649:OPC-Site-02"
+        }
+      },
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    },
+    {
+      "datasource": "IOTDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a1414a",
+                "value": null
+              },
+              {
+                "color": "#f2a104",
+                "value": 0.9
+              },
+              {
+                "color": "#00743f",
+                "value": 0.95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 12,
+        "y": 9
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.0",
+      "repeatIteration": 1596556548764,
+      "repeatPanelId": 3,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-02",
+          "value": "urn:b34554f03649:OPC-Site-02"
+        }
+      },
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "rawSql": "select [time],[Performance] from GetPerformance($__timeFrom(), $__timeTo(), $Asset,$idealRunrate, 0)",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Performance",
+      "type": "stat"
+    },
+    {
+      "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>=</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+      "datasource": "InfluxDB",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 2,
+        "x": 16,
+        "y": 9
+      },
+      "id": 23,
+      "mode": "html",
+      "options": {
+        "content": "<div align=center>\r\n\r\n<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0\r\n style='border:none;'>\r\n <tr style=''>\r\n  <td width=623 style='height:190.0pt'>\r\n  <p align=center style='text-align:center'><b><span style='font-size:60.0pt;color:grey'>=</span></b></p>\r\n  </td>\r\n </tr>\r\n</table>\r\n\r\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "7.1.0",
+      "repeat": null,
+      "repeatDirection": "v",
+      "repeatIteration": 1596556548764,
+      "repeatPanelId": 12,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-02",
+          "value": "urn:b34554f03649:OPC-Site-02"
+        }
+      },
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": "IOTDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "displayName": "",
+          "mappings": [
+            {
+              "id": 0,
+              "op": "=",
+              "text": "N/A",
+              "type": 1,
+              "value": "null"
+            }
+          ],
+          "nullValueMode": "connected",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a1414a",
+                "value": null
+              },
+              {
+                "color": "#f2a104",
+                "value": 0.8
+              },
+              {
+                "color": "#00743f",
+                "value": 0.9
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 9
+      },
+      "id": 24,
+      "links": [],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.0",
+      "repeat": null,
+      "repeatDirection": "v",
+      "repeatIteration": 1596556548764,
+      "repeatPanelId": 14,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "Asset": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-02",
+          "value": "urn:b34554f03649:OPC-Site-02"
+        }
+      },
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "rawSql": "select a.[time],[Availability]*[Quality]*[Performance] as OEE \nfrom GetAvailability($__timeFrom(), $__timeTo(), $Asset, 0) a \njoin GetQuality($__timeFrom(), $__timeTo(), $Asset, 0) q on (a.[time]=q.[time])\njoin GetPerformance($__timeFrom(), $__timeTo(), $Asset, $idealRunrate, 0) p on (a.[time]=p.[time])\n",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "OEE",
+      "type": "stat"
+    }
+  ],
+  "schemaVersion": 26,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "urn:b34554f03649:OPC-Site-01 + urn:b34554f03649:OPC-Site-02",
+          "value": [
+            "urn:b34554f03649:OPC-Site-01",
+            "urn:b34554f03649:OPC-Site-02"
+          ]
+        },
+        "datasource": "IOTDB",
+        "definition": "Select distinct Asset From DeviceData",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": true,
+        "name": "Asset",
+        "options": [],
+        "query": "Select distinct Asset From DeviceData",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "1400",
+          "value": "1400"
+        },
+        "hide": 0,
+        "label": "Ideal Run Rate (items/min)",
+        "name": "idealRunrate",
+        "options": [
+          {
+            "selected": true,
+            "text": "1400",
+            "value": "1400"
+          }
+        ],
+        "query": "1400",
+        "skipUrlSync": false,
+        "type": "constant"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Asset Benchmarking",
+  "uid": "DfpMb0VMk",
+  "version": 6
+}

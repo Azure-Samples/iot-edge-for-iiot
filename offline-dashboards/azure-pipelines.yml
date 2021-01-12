@@ -1,0 +1,235 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - 'offline-dashboards/*'
+
+pr:
+  autoCancel: true
+
+variables:
+  DEPLOYMENT_TARGET_CONDITION_FOR_DASHBOARD: tags.dashboardNode=true
+  DEPLOYMENT_TARGET_CONDITION_FOR_PUBLISHER: tags.publisherNode=true 
+  BUILD_PLATFORM: amd64
+  ACR_ADDRESS: $(ACR_NAME).azurecr.io
+  LOCAL_CONTAINER_REGISTRY_ADDRESS: $upstream:443
+  ROOT_DIR: ./offline-dashboards
+  ACR_REPOSITORY: offline-dashboards
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+
+    # Determine module verion
+    - task: UseGitVersion@5
+      inputs:
+        versionSpec: '5.x.x'
+
+    # Set container version. 
+    - script: |
+        echo "##vso[task.setvariable variable=CONTAINER_VERSION_TAG]$(GitVersion.AssemblySemVer)" 
+      displayName: Set container version
+
+    # replace build initdb.sh
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path="$(ROOT_DIR)/modules/sqledge/initdb.sh"
+          (Get-Content $path) -replace "#SQLEDGE_ADMIN_PASSWORD#", $env:SQLEDGE_ADMIN_PASSWORD | out-file $path    
+      displayName: build initdb.sh
+
+    # build publishedNodes.json
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(AZURE_SERVICE_CONNECTION)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $publishedNodes = '[]' | ConvertFrom-Json
+          $templateStr = Get-Content -Path '$(ROOT_DIR)/modules/opcpublisher/publishedNodes.template.json'
+          ForEach ($vm in $(az vm list --resource-group $env:IIOT_ASSETS_RG --query "[].osProfile.computerName" -o tsv))
+          {
+              $template = $templateStr | ConvertFrom-Json
+              $template[0].EndpointUrl = 'opc.tcp://{0}:54845/OPCUA/Site1' -f $vm
+              $template[1].EndpointUrl = 'opc.tcp://{0}:54855/OPCUA/Site2' -f $vm
+              $publishedNodes += $template
+          }
+          $publishedNodes | ConvertTo-Json -depth 32 | Set-Content '$(ROOT_DIR)/modules/opcpublisher/publishedNodes.json' 
+      displayName: build publishedNodes.json
+
+    # dump env variables
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(AZURE_SERVICE_CONNECTION)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          (gci env:*).GetEnumerator() | Sort-Object Name | Out-String
+          Write-Host "Dir Contents:<current directory> ================================================================================"
+          Get-ChildItem -Recurse
+          Write-Host "Dir Contents `$AGENT_WORKFOLDER:$AGENT_WORKFOLDER ================================================================================"
+          Get-ChildItem -Path $AGENT_WORKFOLDER -Recurse
+          Write-Host "Dir Contents `$AGENT_BUILDDIRECTORY:$AGENT_BUILDDIRECTORY ================================================================================"
+          Get-ChildItem -Path $AGENT_BUILDDIRECTORY -Recurse
+      displayName: dump env variables
+
+    # Build Modules Grafana and SqlEdge
+    - task: AzureIoTEdge@2
+      inputs:
+        action: 'Build module images'
+        templateFilePath: '$(ROOT_DIR)/dashboard.deployment.template.json'
+        defaultPlatform: $(BUILD_PLATFORM)
+      displayName: Build Edge Modules Grafana and SqlEdge
+    
+    # Build Modules opcpublisher
+    - task: AzureIoTEdge@2
+      inputs:
+        action: 'Build module images'
+        templateFilePath: '$(ROOT_DIR)/publisher.deployment.template.json'
+        defaultPlatform: $(BUILD_PLATFORM)
+      displayName: Build Edge Module opcpublisher
+    
+    # Build Modules opcsimulator
+    - task: AzureIoTEdge@2
+      inputs:
+        action: 'Build module images'
+        templateFilePath: '$(ROOT_DIR)/simulator.deployment.template.json'
+        defaultPlatform: $(BUILD_PLATFORM)
+      displayName: Build Edge Module opcsimulator
+    
+    # Push Modules Grafana and SqlEdge
+    - task: AzureIoTEdge@2
+      inputs:
+        action: 'Push module images'
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscriptionEndpoint: $(AZURE_SERVICE_CONNECTION)
+        azureContainerRegistry: '{"loginServer":"$(ACR_ADDRESS)", "id" : "/subscriptions/$(AZURE_SUBSCRIPTION_ID)/resourceGroups/$(ACR_RESOURCE_GROUP)/providers/Microsoft.ContainerRegistry/registries/$(ACR_NAME)"}'
+        templateFilePath: '$(ROOT_DIR)/dashboard.deployment.template.json'
+        defaultPlatform: $(BUILD_PLATFORM)
+        fillRegistryCredential: 'true'
+      displayName: Push Edge Modules Grafana and SqlEdge
+
+    # Push Module opcpublisher
+    - task: AzureIoTEdge@2
+      inputs:
+        action: 'Push module images'
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscriptionEndpoint: $(AZURE_SERVICE_CONNECTION)
+        azureContainerRegistry: '{"loginServer":"$(ACR_ADDRESS)", "id" : "/subscriptions/$(AZURE_SUBSCRIPTION_ID)/resourceGroups/$(ACR_RESOURCE_GROUP)/providers/Microsoft.ContainerRegistry/registries/$(ACR_NAME)"}'
+        templateFilePath: '$(ROOT_DIR)/publisher.deployment.template.json'
+        defaultPlatform: $(BUILD_PLATFORM)
+        fillRegistryCredential: 'true'
+      displayName: Push Edge Modules opcpublisher
+
+    # Push Module opcsimulator
+    - task: AzureIoTEdge@2
+      inputs:
+        action: 'Push module images'
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscriptionEndpoint: $(AZURE_SERVICE_CONNECTION)
+        azureContainerRegistry: '{"loginServer":"$(ACR_ADDRESS)", "id" : "/subscriptions/$(AZURE_SUBSCRIPTION_ID)/resourceGroups/$(ACR_RESOURCE_GROUP)/providers/Microsoft.ContainerRegistry/registries/$(ACR_NAME)"}'
+        templateFilePath: '$(ROOT_DIR)/simulator.deployment.template.json'
+        defaultPlatform: $(BUILD_PLATFORM)
+        fillRegistryCredential: 'true'
+      displayName: Push Edge Modules opcsimulator
+
+    # Add latest tag
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(AZURE_SERVICE_CONNECTION)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $repos = @('grafana','sqledge','opcpublisher','opcsimulator')
+          foreach ($repo in $repos) {
+            $jsonTagList = $(az acr repository show-tags -n $env:ACR_NAME --repository "$env:ACR_REPOSITORY/$repo" --output json) | ConvertFrom-Json
+            If ($jsonTagList.Where({ $_ -eq "latest" }).Count -gt 0)
+            {
+              Write-Host "Removing tag`: `"$env:ACR_REPOSITORY/${repo}:latest`""
+              az acr repository untag -n  $env:ACR_NAME --image "$env:ACR_REPOSITORY/${repo}:latest"
+            }
+            Write-Host "Adding tag`: `"$env:ACR_REPOSITORY/${repo}:latest`" for `"$env:ACR_REPOSITORY/${repo}:$env:CONTAINER_VERSION_TAG-$env:BUILD_PLATFORM`"" 
+            az acr import -n $env:ACR_NAME --source "$env:ACR_ADDRESS/$env:ACR_REPOSITORY/${repo}:$env:CONTAINER_VERSION_TAG-$env:BUILD_PLATFORM" -t "$env:ACR_REPOSITORY/${repo}:latest"
+          }
+      displayName: Add latest tag 
+
+    # layered deployment manifest for dashboard node
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path="${env:ROOT_DIR}/dashboard.layered.deployment.template.json"
+          $template_content = Get-Content $path
+          $template_content = $template_content -replace "#ACR_ADDRESS#", ${env:ACR_ADDRESS}  
+          $template_content = $template_content -replace "#ACR_USERNAME#", ${env:ACR_USERNAME}  
+          $template_content = $template_content -replace "#ACR_PASSWORD#", ${env:ACR_PASSWORD}  
+          $template_content = $template_content -replace "#GRAFANA_ADMIN_PASSWORD#", ${env:GRAFANA_ADMIN_PASSWORD}  
+          $template_content = $template_content -replace "#SQLEDGE_ADMIN_PASSWORD#", ${env:SQLEDGE_ADMIN_PASSWORD}  
+          $template_content = $template_content -replace "#MODULES.sqledge#", "${env:ACR_ADDRESS}/${env:ACR_REPOSITORY}/sqledge:${env:CONTAINER_VERSION_TAG}-${env:BUILD_PLATFORM}" 
+          $template_content = $template_content -replace "#MODULES.grafana#", "${env:ACR_ADDRESS}/${env:ACR_REPOSITORY}/grafana:${env:CONTAINER_VERSION_TAG}-${env:BUILD_PLATFORM}" 
+          New-Item -Path "." -Name "config" -ItemType "directory"
+          $outpath = "config/dashboard.layered.deployment.json"
+          Set-Content -Path $outpath -Value $template_content
+          Write-Host $template_content
+      displayName: layered deployment manifest for dashboard node
+
+    # layered deployment manifest for publisher node
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $path="${env:ROOT_DIR}/publisher.layered.deployment.template.json"
+          $template_content = Get-Content $path
+          $template_content = $template_content -replace "#MODULES.opcpublisher#", "`$upstream:443/${env:ACR_REPOSITORY}/opcpublisher:${env:CONTAINER_VERSION_TAG}-${env:BUILD_PLATFORM}" 
+          $outpath = "config/publisher.layered.deployment.json"
+          Set-Content -Path $outpath -Value $template_content
+          Write-Host $template_content
+      displayName: layered deployment manifest for publisher node
+
+    # Copy layered deployment manifests to artifact directory
+    - script: |
+        cp config/dashboard.layered.deployment.json $(Build.ArtifactStagingDirectory)
+        cp config/publisher.layered.deployment.json $(Build.ArtifactStagingDirectory)
+      displayName: Copy layered deployment manifests to artifact directory
+
+      # Publish the deployment manifest as a pipeline artifact
+    - publish: $(Build.ArtifactStagingDirectory)
+      artifact: config
+
+- stage: Release
+  jobs:
+  - job: Release
+    steps:
+    # Download deployment manifest from build stage
+    - download: current
+      artifact: config
+
+    # create layered deployment for dashboard node
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(AZURE_SERVICE_CONNECTION)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az extension add --upgrade --name azure-iot 
+          az iot edge deployment delete --deployment-id dashboard-node --hub-name $(IOT_HUB_NAME)
+          az iot edge deployment create --deployment-id dashboard-node --hub-name $(IOT_HUB_NAME) --priority 10 --content $(Pipeline.Workspace)/config/dashboard.layered.deployment.json --layered true --target-condition "$(DEPLOYMENT_TARGET_CONDITION_FOR_DASHBOARD)"
+      displayName: Create layered deployment for 'dashboard-node'
+
+    # create layered deployment for publisher node
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(AZURE_SERVICE_CONNECTION)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az extension add --upgrade --name azure-iot 
+          az iot edge deployment delete --deployment-id publisher-node --hub-name $(IOT_HUB_NAME)
+          az iot edge deployment create --deployment-id publisher-node --hub-name $(IOT_HUB_NAME) --priority 10 --content $(Pipeline.Workspace)/config/publisher.layered.deployment.json --layered true --target-condition "$(DEPLOYMENT_TARGET_CONDITION_FOR_PUBLISHER)"
+      displayName: Create layered deployment for 'publisher-node'

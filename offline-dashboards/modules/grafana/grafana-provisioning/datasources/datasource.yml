@@ -1,0 +1,11 @@
+apiVersion: 1
+datasources:
+  - name: IOTDB
+    type: mssql
+    database: telemetry
+    url: sqledge:1433
+    isDefault: true
+    editable: true
+    user: sa
+    secureJsonData:
+      password: "Password_54321"
