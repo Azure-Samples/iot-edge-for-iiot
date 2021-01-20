@@ -32,7 +32,7 @@ configFilePath="./config.txt"
 location="eastus"
 resourceGroupPrefix="iotedge4iiot"
 vmSize="Standard_B1ms" #"Standard_D3_v2"
-sshPublicKeyPath="~/.ssh/id_rsa"
+sshPublicKeyPath="$(readlink -f ~/.ssh/id_rsa)
 
 while :; do
     case $1 in
