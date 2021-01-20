@@ -8,16 +8,17 @@ function show_help() {
    echo
    echo "Syntax: ./deploy_purdue.sh [-flag parameter]"
    echo ""
+   echo "Required list of flags:"
+   echo "-sshPublicKeyPath Path to the SSH public key that should be used to connect to the jump box, which is the entry point to the Purdue network."
+   echo ""
    echo "List of optional flags:"
-   echo "-h                 Print this help."
-   echo "-a                 Prefix of the IP addresses used by all subnets in the Purdue Network. Default: 10.16."
-   echo "-adminUsername     Administrator username of the Azure VMs to deploy."
-   echo "-adminPassword     Administrator password of the Azure VMs to deploy."
-   echo "-l                 Azure region to deploy resources to. Default: eastus."
-   echo "-n                 Name of the Azure Virtual Network with the Purdue Network. Default: PurdueNetwork."
-   echo "-rg                Prefix used for all new Azure Resource Groups created by this script. Default: iotedge4iiot."
-   echo "-s                 Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
-   echo "-vmSize            Size of the Azure VMs to deploy. Default: Standard_B1ms."
+   echo "-h                       Print this help."
+   echo "-a                       Prefix of the IP addresses used by all subnets in the Purdue Network. Default: 10.16."
+   echo "-l                       Azure region to deploy resources to. Default: eastus."
+   echo "-n                       Name of the Azure Virtual Network with the Purdue Network. Default: PurdueNetwork."
+   echo "-rg                      Prefix used for all new Azure Resource Groups created by this script. Default: iotedge4iiot."
+   echo "-s                       Azure subscription ID to use to deploy resources. Default: use current subscription of Azure CLI."
+   echo "-vmSize                  Size of the Azure VMs to deploy. Default: Standard_B1ms."
    echo
 }
 
@@ -70,17 +71,11 @@ while :; do
         -vmSize=)
             echo "Missing vmSize. Exiting."
             exit;;
-        -adminUsername=)
-            echo "Missing VM adminitrator username. Exiting."
+        -sshPublicKeyPath=)
+            echo "Missing path to jump box SSH public key. Exiting."
             exit;;
-        -adminUsername=?*)
-            adminUsername=${1#*=}
-            ;;
-        -adminPassword=)
-            echo "Missing VM adminitrator password. Exiting."
-            exit;;
-        -adminPassword=?*)
-            adminPassword=${1#*=}
+        -sshPublicKeyPath=?*)
+            sshPublicKeyPath=${1#*=}
             ;;
         --)
             shift
@@ -97,6 +92,12 @@ supportResourceGroupName="${resourceGroupPrefix}-RG-support"
 jumpboxResourceGroupName="${resourceGroupPrefix}-RG-jumpbox"
 proxyResourceGroupName="${resourceGroupPrefix}-RG-proxy"
 
+#Verifying that mandatory parameters are there
+if [ -z $sshPublicKeyPath ]; then
+    echo "Missing path to jump box SSH public key. Exiting."
+    exit 1
+fi
+
 #global variable
 scriptFolder=$(dirname "$(readlink -f "$0")")
 
@@ -108,7 +109,7 @@ fi
 # echo "Executing script with Azure Subscription: ${subscriptionName}" 
 
 echo "==========================================================="
-echo "==	               Purdue Network                  =="
+echo "==	                Purdue Network                   =="
 echo "==========================================================="
 echo ""
 
@@ -142,7 +143,7 @@ echo "L0 layer     : ${networkOutputs[0]} (${networkOutputs[1]})"
 echo ""
 
 echo "==========================================================="
-echo "==	                    Jumpbox                  =="
+echo "==	                     Jump box                  =="
 echo "==========================================================="
 echo ""
 
@@ -151,32 +152,32 @@ then
   echo "Existing jumpbox resource group found: $jumpboxResourceGroupName "
 else
   az group create --name "$jumpboxResourceGroupName" --location "$location" --tags "$resourceGroupPrefix"  "CreationDate"=$(date --utc +%Y%m%d_%H%M%SZ)  1> /dev/null
-  echo "Jumpbox resource group: $jumpboxResourceGroupName "  
+  echo "Jumpbox resource group: $jumpboxResourceGroupName"  
 fi
 
 jumpboxDeployFilePath="${scriptFolder}/ARM-templates/jumpboxdeploy.json"
-if [ ! -z $adminPassword ]; then
-    jumpBoxOutput=$(az deployment group create --name PurdueJumpBoxDeployment --resource-group ${jumpboxResourceGroupName} --template-file "$jumpboxDeployFilePath" --parameters \
-    networkName="${networkName}" subnetName='999-Demo-Support' networkResourceGroupName="${networkResourceGroupName}" machineName="jumpbox" machineAdminPassword="${adminPassword}"\
-    --query "properties.outputs.[adminUsername.value, adminPassword.value, fqdn.value]" -o tsv)
-else
-    jumpBoxOutput=$(az deployment group create --name PurdueJumpBoxDeployment --resource-group ${jumpboxResourceGroupName} --template-file "$jumpboxDeployFilePath" --parameters \
-    networkName="${networkName}" subnetName='999-Demo-Support' networkResourceGroupName="${networkResourceGroupName}" machineName="jumpbox" \
-    --query "properties.outputs.[adminUsername.value, adminPassword.value, fqdn.value]" -o tsv)
-fi
+sshPublicKey=$(eval cat $sshPublicKeyPath)
+jumpBoxOutput=$(az deployment group create --name PurdueJumpBoxDeployment --resource-group ${jumpboxResourceGroupName} --template-file "$jumpboxDeployFilePath" --parameters \
+    networkName="${networkName}" subnetName='999-Demo-Support' networkResourceGroupName="${networkResourceGroupName}" machineName="jumpbox" machineAdminSshPublicKey="${sshPublicKey}"\
+    --query "properties.outputs.[adminUsername.value, fqdn.value]" -o tsv)
 
 jumpBoxOutputs=($jumpBoxOutput)
 jumpBoxUser=${jumpBoxOutputs[0]}
-jumpBoxPassword=${jumpBoxOutputs[1]}
-jumpBoxFullyQualifiedName=${jumpBoxOutputs[2]}
+jumpBoxFullyQualifiedName=${jumpBoxOutputs[1]}
 jumpboxSSH="ssh $jumpBoxUser@$jumpBoxFullyQualifiedName"
 
-echo "Jumpbox created. Key values:"
+# Creating SSH key pair to connect from the jump box to VMs within the Purdue network
+runCommandOutput=$(az vm run-command invoke -g ${jumpboxResourceGroupName} -n jumpbox --command-id RunShellScript --scripts "sudo -u jbadmin ssh-keygen -m PEM -t rsa -b 4096 -f /home/jbadmin/.ssh/id_rsa -q -N "\"\"" && sudo -u jbadmin cat /home/jbadmin/.ssh/id_rsa.pub" --query "value[].message" -o tsv)
+jbSshPublicKey=$(echo ${runCommandOutput} | grep -o -P '(?<=\[stdout\]\ ).*(?=\ \[stderr\])')
+rm ${scriptFolder}/.jbSshPublicKey 2> /dev/null
+echo "$jbSshPublicKey" >> "${scriptFolder}/.jbSshPublicKey"
+
+echo "Jump box created. Key values:"
 echo ""
-echo "Jumpbox User Name: $jumpBoxUser"
-echo "Jumpbox Password: $jumpBoxPassword"
-echo "Jumpbox Fully Qualified Name: $jumpBoxFullyQualifiedName"
-echo "Jumpbox SSH: $jumpboxSSH"
+echo "Jump box username: $jumpBoxUser"
+echo "Jump box FQDN:     $jumpBoxFullyQualifiedName"
+echo "Jump box SSH:      $jumpboxSSH"
+
 echo ""
 echo "==========================================================="
 echo "==	               IT & OT Proxies                 =="
@@ -192,47 +193,37 @@ else
 fi
 
 proxyDeployFilePath="${scriptFolder}/ARM-templates/proxydeploy.json"
-if [ ! -z $adminPassword ]; then
-    proxyOutputs=($(az deployment group create --name PurdueProxyDeployment --resource-group ${proxyResourceGroupName} --template-file "$proxyDeployFilePath" --parameters \
+proxyOutputs=($(az deployment group create --name PurdueProxyDeployment --resource-group ${proxyResourceGroupName} --template-file "$proxyDeployFilePath" --parameters \
     networkResourceGroupName="${networkResourceGroupName}" networkName="${networkName}" itProxySubnetName='8-IT-Dmz' otProxySubnetName='5-OT-Dmz' \
-    itProxyMachineName="itproxy" otProxyMachineName="otproxy" itProxyMachineAdminPassword="${adminPassword}" otProxyMachineAdminPassword="${adminPassword}"\
-    --query "properties.outputs.[itProxyMachineName.value, itProxyPrivateIpAddress.value, itProxyAdminUsername.value, itProxyAdminPassword.value, otProxyMachineName.value, otProxyPrivateIpAddress.value, otProxyAdminUsername.value, otProxyAdminPassword.value]" -o tsv))
-else
-    proxyOutputs=($(az deployment group create --name PurdueProxyDeployment --resource-group ${proxyResourceGroupName} --template-file "$proxyDeployFilePath" --parameters \
-    networkResourceGroupName="${networkResourceGroupName}" networkName="${networkName}" itProxySubnetName='8-IT-Dmz' otProxySubnetName='5-OT-Dmz' \
-    itProxyMachineName="itproxy" otProxyMachineName="otproxy"\
-    --query "properties.outputs.[itProxyMachineName.value, itProxyPrivateIpAddress.value, itProxyAdminUsername.value, itProxyAdminPassword.value, otProxyMachineName.value, otProxyPrivateIpAddress.value, otProxyAdminUsername.value, otProxyAdminPassword.value]" -o tsv))
-fi
+    itProxyMachineName="itproxy" otProxyMachineName="otproxy" itProxyMachineAdminSshPublicKey="${jbSshPublicKey}" otProxyMachineAdminSshPublicKey="${jbSshPublicKey}"\
+    --query "properties.outputs.[itProxyMachineName.value, itProxyPrivateIpAddress.value, itProxyAdminUsername.value, otProxyMachineName.value, otProxyPrivateIpAddress.value, otProxyAdminUsername.value]" -o tsv))
 
 itProxyMachineName=${proxyOutputs[0]}
 itProxyPrivateIpAddress=${proxyOutputs[1]}
 itProxyUser=${proxyOutputs[2]}
-itProxyPassword=${proxyOutputs[3]}
-otProxyMachineName=${proxyOutputs[4]}
-otProxyPrivateIpAddress=${proxyOutputs[5]}
-otProxyUser=${proxyOutputs[6]}
-otProxyPassword=${proxyOutputs[7]}
+otProxyMachineName=${proxyOutputs[3]}
+otProxyPrivateIpAddress=${proxyOutputs[4]}
+otProxyUser=${proxyOutputs[5]}
 otProxySSH="ssh $otProxyUser@$otProxyMachineName"
 itProxySSH="ssh $itProxyUser@$itProxyMachineName"
 
 echo "IT & OT Proxies created. Key values:"
 echo ""
-echo "IT Proxy username: $itProxyUser"
-echo "IT Proxy password: $itProxyPassword"
-echo "IT Proxy machine name: $itProxyMachineName"
-echo "IT Proxy SSH: $itProxySSH"
+echo "IT Proxy username:           $itProxyUser"
+echo "IT Proxy machine name:       $itProxyMachineName"
+echo "IT Proxy SSH:                $itProxySSH"
 echo "IT Proxy private IP address: $itProxyPrivateIpAddress"
-echo "IT Proxy HTTP_PROXY: http_proxy=http://$itProxyPrivateIpAddress:3128"
-echo "IT Proxy HTTPS_PROXY: https_proxy=http://$itProxyPrivateIpAddress:3128"
+echo "IT Proxy HTTP_PROXY:         http_proxy=http://$itProxyPrivateIpAddress:3128"
+echo "IT Proxy HTTPS_PROXY:        https_proxy=http://$itProxyPrivateIpAddress:3128"
 echo ""
-echo "OT Proxy username: $otProxyUser"
-echo "OT Proxy password: $otProxyPassword"
-echo "OT Proxy machine Name: $otProxyMachineName"
-echo "OT Proxy SSH: $otProxySSH"
+echo "OT Proxy username:           $otProxyUser"
+echo "OT Proxy machine Name:       $otProxyMachineName"
+echo "OT Proxy SSH:                $otProxySSH"
 echo "OT Proxy private IP address: $otProxyPrivateIpAddress"
-echo "OT Proxy HTTP_PROXY: http_proxy=http://$otProxyPrivateIpAddress:3128"
-echo "OT Proxy HTTPS_PROXY: https_proxy=http://$otProxyPrivateIpAddress:3128"
+echo "OT Proxy HTTP_PROXY:         http_proxy=http://$otProxyPrivateIpAddress:3128"
+echo "OT Proxy HTTPS_PROXY:        https_proxy=http://$otProxyPrivateIpAddress:3128"
 echo ""
-echo "Please remember that there have been outbound security rules enabled on the NSGs that have been added for ease of post setup, please remember or run the lockdown_purdue.sh script next."
+echo "Proxy VMs can still access internet at this point to enable their configuration."
+echo "Please wait until completion of the install script or run the lockdown_purdue.sh script manually to lock down the Purdue network."
 echo ""
 

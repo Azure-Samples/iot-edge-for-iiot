@@ -40,6 +40,8 @@ In this sample, we will simulate in Azure a Purdue network, industrial assets an
         az account show
         ```
 
+    If you need to change subscription, use the `az account set -s=<your_subscription>` command.
+
 ## Simulate a Purdue network and a hierarchy of IoT Edge devices
 
 ### Deploy the simulation
@@ -62,10 +64,17 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
     cd ./iot-edge-for-iiot
     find  -name '*.sh' -print0 | xargs -0 chmod +x
     ```
+
 - Provide credentials for IoT Edge devices to access your Azure Container Registry (ACR):
 
     ```bash
     code ACR.env
+    ```
+
+- Unless you already have a SSH key pair, create one to connect to machines in your simulated Purdue network (To learn more about SSH key pairs, read [this documentation](https://docs.microsoft.com/azure/virtual-machines/linux/mac-create-ssh-keys)):
+
+    ```bash
+    ssh-keygen -m PEM -t rsa -b 4096
     ```
 
 - Configure your simulation or keep the default one that deploys 3 IoT Edge devices in layers L5, L4 and L3:
@@ -101,6 +110,8 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
 
     By default, *Azure VM B1ms* are used for all the VMs, e.g. 1vCPU, 2Gb RAM, 4GB storage VMs. To simulate heavy loads, upgrade to more powerful VMs by passing the *vmSize* parameters to the installation script.
 
+    By default, it uses a SSH public key located at `~/.ssh/id_rsa`. To use a different key, pass the *sshPublicKeyPath* parameter to the installation script.
+
     Take note of all the outputs of the installation scripts since it lists key information on your network structure and on access information for all your VMs.
 
 - Monitor your deployment. For each IoT Edge device, verify that after a couple of minutes all their modules are in `runningStatus` reported as `running`. Either by looking at your IoT Edge devices in t[he Azure portal](https://ms.portal.azure.com/?feature.canmodifystamps=true&Microsoft_Azure_Iothub=development#home) or by running the following Azure CLI command:
@@ -113,19 +124,19 @@ You now have a Purdue network simulated in Azure along with some IoT Edge device
 
 ### Access your devices
 
-Even though you should not need to directly access your IoT Edge devices, it may be convenient to do so just for education purposes. Given that the Purdue network is isolated from the Internet, an observation point has been added to this network to access devices. This observation point is called a jumpBox and it enables you to access any devices on the network. The jumpBox is not part of the Purdue model and has only been added for education purposes.
+Even though you should not need to directly access your IoT Edge devices, it may be convenient to do so just for education purposes. Given that the Purdue network is isolated from the Internet, an observation point has been added to this network to access devices. This observation point is called a jump box and it enables you to access any devices on the network. The jump box is not part of the Purdue model and has only been added for education purposes.
 
-To access a device in the network, first connect to the jumpBox via SSH and from there connect to any other device on the network via SSH again. All the credentials and SSH handlers are provided by the installation script so that you only need to copy / paste values from there.
+To access a device in the network, first connect to the jump box via SSH and from there connect to any other device on the network via SSH again. All the SSH handlers are provided by the installation script so that you only need to copy / paste values from there. A SSH key pair has also been automatically installed between the jump box and the VMs within the network to simplify their access, e.g. no password is needed.
 
-From your favorite SSH client:
+From the [Azure Cloud Shell](https://shell.azure.com/) (on which you installed an SSH key to access the jump box):
 
-- Connect to your Jumpbox:
+- Connect to your jump box:
 
     ```bash
     <jumpbox_ssh_handle_from_the_installation_script>
     ```
 
-- Connect to any other device on the network:
+- From the jump box, connect to any other device on the network:
 
     ```bash
     <iot_edge_device_ssh_handle_from_the_installation_script>
