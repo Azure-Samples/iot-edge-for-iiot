@@ -143,7 +143,7 @@ echo "L0 layer     : ${networkOutputs[0]} (${networkOutputs[1]})"
 echo ""
 
 echo "==========================================================="
-echo "==	                    Jump box                 =="
+echo "==	                     Jump box                  =="
 echo "==========================================================="
 echo ""
 
