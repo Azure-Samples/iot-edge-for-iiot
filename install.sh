@@ -148,7 +148,7 @@ jumpBoxSshPublicKeyPath="$(readlink -f ./scripts/.jbSshPublicKey)"
 ./scripts/lockdown_purdue.sh -s=$subscription -nrg=$networkResourceGroupName
 ./scripts/import_acr.sh -s=$subscription
 ./scripts/deploy_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName
-rm $jumpBoxSshPublicKeyPath
+rm $jumpBoxSshPublicKeyPath 2> /dev/null
 
 echo "==========================================================="
 echo "==	              End of deployment script        	 =="
