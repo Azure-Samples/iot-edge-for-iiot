@@ -223,6 +223,7 @@ echo "OT Proxy private IP address: $otProxyPrivateIpAddress"
 echo "OT Proxy HTTP_PROXY:         http_proxy=http://$otProxyPrivateIpAddress:3128"
 echo "OT Proxy HTTPS_PROXY:        https_proxy=http://$otProxyPrivateIpAddress:3128"
 echo ""
-echo "Please remember that there have been outbound security rules enabled on the NSGs that have been added for ease of post setup, please remember or run the lockdown_purdue.sh script next."
+echo "Proxy VMs can still access internet at this point to enable their configuration."
+echo "Please wait until completion of the install script or run the lockdown_purdue.sh script manually to lock down the Purdue network."
 echo ""
 

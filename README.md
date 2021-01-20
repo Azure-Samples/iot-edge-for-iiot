@@ -62,10 +62,17 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
     cd ./iot-edge-for-iiot
     find  -name '*.sh' -print0 | xargs -0 chmod +x
     ```
+
 - Provide credentials for IoT Edge devices to access your Azure Container Registry (ACR):
 
     ```bash
     code ACR.env
+    ```
+
+- Unless you already have a SSH key pair, create one to connect to machines in your simulated Purdue network (To learn more about SSH key pairs, read [this documentation](https://docs.microsoft.com/azure/virtual-machines/linux/mac-create-ssh-keys)):
+
+    ```bash
+    ssh-keygen -m PEM -t rsa -b 4096
     ```
 
 - Configure your simulation or keep the default one that deploys 3 IoT Edge devices in layers L5, L4 and L3:
@@ -100,6 +107,8 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
     The remainder of the installation scripts provisions the IoT Edge devices in your IoT hub, configures the IoT Edge devices by installing test certificates and updating their IoT Edge configuration files, locks down the network so that VMs no longer have internet access once they are done with their configuration scripts (that comes from the internet) and finally deploys base workloads to IoT Edge devices via IoT hub.
 
     By default, *Azure VM B1ms* are used for all the VMs, e.g. 1vCPU, 2Gb RAM, 4GB storage VMs. To simulate heavy loads, upgrade to more powerful VMs by passing the *vmSize* parameters to the installation script.
+
+    By default, it uses a SSH public key located at `~/.ssh/id_rsa`. To use a different key, pass the *sshPublicKeyPath* parameter to the installation script.
 
     Take note of all the outputs of the installation scripts since it lists key information on your network structure and on access information for all your VMs.
 

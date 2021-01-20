@@ -12,7 +12,6 @@ function show_help() {
    echo "List of optional flags:"
    echo "-h                Print this help."
    echo "-adminUsername    Administrator username of the Azure VMs to deploy. Default: iiotadmin."
-   echo "-adminPassword    Administrator password of the Azure VMs to deploy."
    echo "-c                Path to configuration file with IIOT assets information. Default: ../config.txt."
    echo "-l                Azure region to deploy resources to. Default: eastus."
    echo "-n                Name of the Azure Virtual Network with the Purdue Network. Default: PurdueNetwork."
@@ -165,9 +164,7 @@ source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
 #Deploy IIOT assets
 opcuaDeployFilePath="${scriptFolder}/ARM-templates/opcuadeploy.json"
-echo "Path: $sshPublicKeyPath"
 sshPublicKey=$(cat $sshPublicKeyPath)
-echo "Key: $sshPublicKey"
 iiotAssetsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iiotAssetsResourceGroupName --template-file "$opcuaDeployFilePath" --parameters \
         networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM "${iiotAssetsSubnets[@]}")" \
         machineNames="$(passArrayToARM "${iiotAssets[@]}")" machineAdminName="$adminUsername" machineAdminSshPublicKey="${sshPublicKey}" vmSize="$vmSize" \
@@ -185,4 +182,6 @@ do
     echo "IIoT Asset ssh:                ssh ${iiotAssetsOutputs[i+2]}@${iiotAssetsOutputs[i]}"
 done
 echo ""
-echo "Please remember that there have been outbound security rules enabled on the NSGs that have been added for ease of post setup, please remember or run the lockdown_purdue.sh script next."
+echo "IIOT asset VMs can still access internet at this point to enable their configuration."
+echo "Please wait until completion of the install script or run the lockdown_purdue.sh script manually to lock down the Purdue network."
+echo ""
