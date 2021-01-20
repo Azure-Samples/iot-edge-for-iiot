@@ -113,7 +113,6 @@
         {
           "computerName": "[parameters('machineName')]",
           "adminUsername": "[parameters('machineAdminName')]",
-          "adminPassword": "[parameters('machineAdminSshPublicKey')]",
           "customData": "[base64(concat('#cloud-config\n\npackage_update: true\npackage_upgrade: true\npackages:\n  - curl\nruncmd:\n  - |\n      set -x\n      (\n        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash\n      ) &'))]",
           "linuxConfiguration": {
             "disablePasswordAuthentication": true,

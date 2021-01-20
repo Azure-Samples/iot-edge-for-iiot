@@ -6,10 +6,13 @@ function show_help() {
    echo
    echo "Syntax: ./deploy_iiotassets.sh [-flag parameter]"
    echo ""
+   echo "Required list of flags:"
+   echo "-sshPublicKeyPath     File path to SSH public key that should be used to connect to the iiot assets from the jump box. Install script auto-generate this key from the jump box."
+   echo ""
    echo "List of optional flags:"
    echo "-h                Print this help."
-   echo "-adminUsername   Administrator username of the Azure VMs to deploy. Default: iiotadmin."
-   echo "-adminPassword   Administrator password of the Azure VMs to deploy."
+   echo "-adminUsername    Administrator username of the Azure VMs to deploy. Default: iiotadmin."
+   echo "-adminPassword    Administrator password of the Azure VMs to deploy."
    echo "-c                Path to configuration file with IIOT assets information. Default: ../config.txt."
    echo "-l                Azure region to deploy resources to. Default: eastus."
    echo "-n                Name of the Azure Virtual Network with the Purdue Network. Default: PurdueNetwork."
@@ -106,11 +109,11 @@ while :; do
         -adminUsername=?*)
             adminUsername=${1#*=}
             ;;
-        -adminPassword=)
-            echo "Missing VM adminitrator password. Exiting."
+        -sshPublicKeyPath=)
+            echo "Missing path to jump box SSH public key. Exiting."
             exit;;
-        -adminPassword=?*)
-            adminPassword=${1#*=}
+        -sshPublicKeyPath=?*)
+            sshPublicKeyPath=${1#*=}
             ;;
         --)
             shift
@@ -130,6 +133,11 @@ if [ -z ${configFilePath} ]; then
     echo "Missing configuration file path. Exiting."
     exit 1
 fi
+if [ -z $sshPublicKeyPath ]; then
+    echo "Missing file path to SSH public key. Exiting."
+    exit 1
+fi
+
 
 # Prepare CLI
 if [ ! -z $subscription ]; then
@@ -157,28 +165,23 @@ source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
 #Deploy IIOT assets
 opcuaDeployFilePath="${scriptFolder}/ARM-templates/opcuadeploy.json"
-if [ ! -z $adminPassword ]; then
-    iiotAssetsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iiotAssetsResourceGroupName --template-file "$opcuaDeployFilePath" --parameters \
+echo "Path: $sshPublicKeyPath"
+sshPublicKey=$(cat $sshPublicKeyPath)
+echo "Key: $sshPublicKey"
+iiotAssetsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iiotAssetsResourceGroupName --template-file "$opcuaDeployFilePath" --parameters \
         networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM "${iiotAssetsSubnets[@]}")" \
-        machineNames="$(passArrayToARM "${iiotAssets[@]}")" machineAdminName="$adminUsername" machineAdminPassword="$adminPassword" vmSize="$vmSize" \
-        --query "properties.outputs.vms.value[].[iiotAssetMachineName, iiotAssetMachinePrivateIPAddress, iiotAssetAdminUsername, iiotAssetAdminPassword]" -o tsv)
-else
-    iiotAssetsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iiotAssetsResourceGroupName --template-file "$opcuaDeployFilePath" --parameters \
-        networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM "${iiotAssetsSubnets[@]}")" \
-        machineNames="$(passArrayToARM "${iiotAssets[@]}")" machineAdminName="$adminUsername" vmSize="$vmSize" \
-        --query "properties.outputs.vms.value[].[iiotAssetMachineName, iiotAssetMachinePrivateIPAddress, iiotAssetAdminUsername, iiotAssetAdminPassword]" -o tsv)
-fi
+        machineNames="$(passArrayToARM "${iiotAssets[@]}")" machineAdminName="$adminUsername" machineAdminSshPublicKey="${sshPublicKey}" vmSize="$vmSize" \
+        --query "properties.outputs.vms.value[].[iiotAssetMachineName, iiotAssetMachinePrivateIPAddress, iiotAssetAdminUsername]" -o tsv)
 
 echo "IIOT assets created. Key values:"
 echo ""
 iiotAssetsOutputs=($iiotAssetsOutput)
-for (( i=0; i<${#iiotAssetsOutputs[@]}-1; i+=4))
+for (( i=0; i<${#iiotAssetsOutputs[@]}-1; i+=3))
 do
     echo ""
     echo "IIoT Asset machine name:       ${iiotAssetsOutputs[i]}"
     echo "IIoT Asset Private IP address: ${iiotAssetsOutputs[i+1]}"
-    echo "IIoT Asset user name:          ${iiotAssetsOutputs[i+2]}"
-    echo "IIoT Asset password:           ${iiotAssetsOutputs[i+3]}"
+    echo "IIoT Asset username:           ${iiotAssetsOutputs[i+2]}"
     echo "IIoT Asset ssh:                ssh ${iiotAssetsOutputs[i+2]}@${iiotAssetsOutputs[i]}"
 done
 echo ""

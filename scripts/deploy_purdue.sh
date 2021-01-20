@@ -9,7 +9,7 @@ function show_help() {
    echo "Syntax: ./deploy_purdue.sh [-flag parameter]"
    echo ""
    echo "Required list of flags:"
-   echo "-jumpBoxSshPublicKeyPath Path to the SSH public key that should be used to connect to the jump box, which is the entry point to the Purdue network."
+   echo "-sshPublicKeyPath Path to the SSH public key that should be used to connect to the jump box, which is the entry point to the Purdue network."
    echo ""
    echo "List of optional flags:"
    echo "-h                       Print this help."
@@ -71,11 +71,11 @@ while :; do
         -vmSize=)
             echo "Missing vmSize. Exiting."
             exit;;
-        -jumpBoxSshPublicKeyPath=)
+        -sshPublicKeyPath=)
             echo "Missing path to jump box SSH public key. Exiting."
             exit;;
-        -jumpBoxSshPublicKeyPath=?*)
-            jumpBoxSshPublicKeyPath=${1#*=}
+        -sshPublicKeyPath=?*)
+            sshPublicKeyPath=${1#*=}
             ;;
         --)
             shift
@@ -93,7 +93,7 @@ jumpboxResourceGroupName="${resourceGroupPrefix}-RG-jumpbox"
 proxyResourceGroupName="${resourceGroupPrefix}-RG-proxy"
 
 #Verifying that mandatory parameters are there
-if [ -z $jumpBoxSshPublicKeyPath ]; then
+if [ -z $sshPublicKeyPath ]; then
     echo "Missing path to jump box SSH public key. Exiting."
     exit 1
 fi
@@ -143,7 +143,7 @@ echo "L0 layer     : ${networkOutputs[0]} (${networkOutputs[1]})"
 echo ""
 
 echo "==========================================================="
-echo "==	                    Jumpbox                  =="
+echo "==	                    Jump box                 =="
 echo "==========================================================="
 echo ""
 
@@ -156,7 +156,7 @@ else
 fi
 
 jumpboxDeployFilePath="${scriptFolder}/ARM-templates/jumpboxdeploy.json"
-sshPublicKey=$(eval cat $jumpBoxSshPublicKeyPath)
+sshPublicKey=$(eval cat $sshPublicKeyPath)
 jumpBoxOutput=$(az deployment group create --name PurdueJumpBoxDeployment --resource-group ${jumpboxResourceGroupName} --template-file "$jumpboxDeployFilePath" --parameters \
     networkName="${networkName}" subnetName='999-Demo-Support' networkResourceGroupName="${networkResourceGroupName}" machineName="jumpbox" machineAdminSshPublicKey="${sshPublicKey}"\
     --query "properties.outputs.[adminUsername.value, fqdn.value]" -o tsv)
@@ -172,11 +172,11 @@ jbSshPublicKey=$(echo ${runCommandOutput} | grep -o -P '(?<=\[stdout\]\ ).*(?=\ 
 rm ${scriptFolder}/.jbSshPublicKey
 echo "$jbSshPublicKey" >> "${scriptFolder}/.jbSshPublicKey"
 
-echo "Jumpbox created. Key values:"
+echo "Jump box created. Key values:"
 echo ""
-echo "Jumpbox username: $jumpBoxUser"
-echo "Jumpbox FQDN: $jumpBoxFullyQualifiedName"
-echo "Jumpbox SSH: $jumpboxSSH"
+echo "Jump box username: $jumpBoxUser"
+echo "Jump box FQDN:     $jumpBoxFullyQualifiedName"
+echo "Jump box SSH:      $jumpboxSSH"
 
 echo ""
 echo "==========================================================="
@@ -209,19 +209,19 @@ itProxySSH="ssh $itProxyUser@$itProxyMachineName"
 
 echo "IT & OT Proxies created. Key values:"
 echo ""
-echo "IT Proxy username: $itProxyUser"
-echo "IT Proxy machine name: $itProxyMachineName"
-echo "IT Proxy SSH: $itProxySSH"
+echo "IT Proxy username:           $itProxyUser"
+echo "IT Proxy machine name:       $itProxyMachineName"
+echo "IT Proxy SSH:                $itProxySSH"
 echo "IT Proxy private IP address: $itProxyPrivateIpAddress"
-echo "IT Proxy HTTP_PROXY: http_proxy=http://$itProxyPrivateIpAddress:3128"
-echo "IT Proxy HTTPS_PROXY: https_proxy=http://$itProxyPrivateIpAddress:3128"
+echo "IT Proxy HTTP_PROXY:         http_proxy=http://$itProxyPrivateIpAddress:3128"
+echo "IT Proxy HTTPS_PROXY:        https_proxy=http://$itProxyPrivateIpAddress:3128"
 echo ""
-echo "OT Proxy username: $otProxyUser"
-echo "OT Proxy machine Name: $otProxyMachineName"
-echo "OT Proxy SSH: $otProxySSH"
+echo "OT Proxy username:           $otProxyUser"
+echo "OT Proxy machine Name:       $otProxyMachineName"
+echo "OT Proxy SSH:                $otProxySSH"
 echo "OT Proxy private IP address: $otProxyPrivateIpAddress"
-echo "OT Proxy HTTP_PROXY: http_proxy=http://$otProxyPrivateIpAddress:3128"
-echo "OT Proxy HTTPS_PROXY: https_proxy=http://$otProxyPrivateIpAddress:3128"
+echo "OT Proxy HTTP_PROXY:         http_proxy=http://$otProxyPrivateIpAddress:3128"
+echo "OT Proxy HTTPS_PROXY:        https_proxy=http://$otProxyPrivateIpAddress:3128"
 echo ""
 echo "Please remember that there have been outbound security rules enabled on the NSGs that have been added for ease of post setup, please remember or run the lockdown_purdue.sh script next."
 echo ""
