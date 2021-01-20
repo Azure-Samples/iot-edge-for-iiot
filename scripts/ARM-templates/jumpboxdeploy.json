@@ -30,13 +30,12 @@
       "defaultValue": "jbadmin",
       "metadata": { "description": "Name of the jump box administrator" }
     },
-    "machineAdminPassword": 
+    "machineAdminSshPublicKey": 
     {
       "type": "string",
-      "defaultValue": "[concat('P', uniqueString(resourceGroup().id, '224F5A8B-51DB-46A3-A7C8-59B0DD584A41'), 'x', '!')]",
-      "metadata": { "description": "Password of the jump box administrator" }
+      "metadata": { "description": "SSH public key provided as a string to connect to the jump box. Use \"ssh-keygen -t rsa -b 2048 &&\" to generate your SSH key pair.)" }
     },
-    "vmSize": 
+    "vmSize":
     {
       "type": "string",
       "defaultValue": "Standard_DS3_v2",
@@ -114,8 +113,17 @@
         {
           "computerName": "[parameters('machineName')]",
           "adminUsername": "[parameters('machineAdminName')]",
-          "adminPassword": "[parameters('machineAdminPassword')]",
-          "customData": "[base64(concat('#cloud-config\n\npackage_update: true\npackage_upgrade: true\npackages:\n  - curl\nruncmd:\n  - |\n      set -x\n      (\n        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash\n      ) &'))]"
+          "adminPassword": "[parameters('machineAdminSshPublicKey')]",
+          "customData": "[base64(concat('#cloud-config\n\npackage_update: true\npackage_upgrade: true\npackages:\n  - curl\nruncmd:\n  - |\n      set -x\n      (\n        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash\n      ) &'))]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+              "publicKeys": [{
+                "path": "[concat('/home/', parameters('machineAdminName'), '/.ssh/authorized_keys')]",
+                "keyData": "[parameters('machineAdminSshPublicKey')]"
+              }]
+            }
+          }
         },
         "storageProfile": 
         {
@@ -143,7 +151,6 @@
   "outputs": 
   {
     "adminUsername": { "type": "string", "value": "[parameters('machineAdminName')]" },
-    "adminPassword": { "type": "string", "value": "[parameters('machineAdminPassword')]" },
     "fqdn": { "value": "[reference(variables('vmPIPName')).dnsSettings.fqdn]", "type": "string" }    
   }
 }
