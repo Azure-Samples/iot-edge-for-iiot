@@ -40,6 +40,8 @@ In this sample, we will simulate in Azure a Purdue network, industrial assets an
         az account show
         ```
 
+    If you need to change subscription, use the `az account set -s=<your_subscription>` command.
+
 ## Simulate a Purdue network and a hierarchy of IoT Edge devices
 
 ### Deploy the simulation
