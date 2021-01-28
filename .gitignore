@@ -5,4 +5,6 @@
 /.vscode/*
 
 /todo.txt
-scripts/.jbSshPublicKey
+/scripts/.jbSshPublicKey
+
+/scripts/edgeDeployments/topLayerBaseDeploymentItProxy.json
