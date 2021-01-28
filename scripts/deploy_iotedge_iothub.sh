@@ -121,12 +121,8 @@ if [ -z $topLayerBaseDeploymentTemplateFilePath ]; then
     echo "TopLayerBaseDeploymentTemplateFilePath is missing from the configuration file. Please verify your configuration file. Exiting."
     exit 1
 fi
-if [ -z $topLayerBaseDeploymentFilePath ]; then
-    echo "BottomLayerBaseDeploymentFilePath is missing from the configuration file. Please verify your configuration file. Exiting."
-    exit 1
-fi
 if [ ! -f $middleLayerBaseDeploymentFilePath ]; then
-    echo "topLayerBaseDeployment manifest file not found. Make sure that the reference from the configuration file is correct. Exiting."
+    echo "middleLayerBaseDeployment manifest file not found. Make sure that the reference from the configuration file is correct. Exiting."
     exit 1
 fi
 if [ ! -f $bottomLayerBaseDeploymentFilePath ]; then
@@ -170,5 +166,8 @@ do
     fi
     ((i++))
 done
+
+rm $topLayerBaseDeploymentFilePath
+
 echo "done"
 echo ""
