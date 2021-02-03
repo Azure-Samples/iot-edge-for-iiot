@@ -21,7 +21,7 @@ function show_help() {
    echo "-l                     Azure region to deploy resources to. Default: eastus."
    echo "-rg                    Prefix used for all new Azure Resource Groups created by this script. Default: iotedge4iiot."
    echo "-vmSize                Size of the Azure VMs to deploy. Default: Standard_B1ms."
-   echo "-sshPublicKeyPath      Path to the SSH public key that should be used to connect to the jump box, which is the entry point to the Purdue network. Default: ~/.ssh/id_rsa"
+   echo "-sshPublicKeyPath      Path to the SSH public key that should be used to connect to the jump box, which is the entry point to the Purdue network. Default: ~/.ssh/id_rsa.pub"
    echo
 }
 

@@ -25,7 +25,7 @@ In this sample, we will simulate in Azure a Purdue network, industrial assets an
         - If not yet installed, install it:
 
             ```bash
-            az extension install --name azure-iot
+            az extension add --name azure-iot
             ```
 
         - If an older version than `0.10.6` is installed, update it:
@@ -110,7 +110,7 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
 
     By default, *Azure VM B1ms* are used for all the VMs, e.g. 1vCPU, 2Gb RAM, 4GB storage VMs. To simulate heavy loads, upgrade to more powerful VMs by passing the *vmSize* parameters to the installation script.
 
-    By default, it uses a SSH public key located at `~/.ssh/id_rsa`. To use a different key, pass the *sshPublicKeyPath* parameter to the installation script.
+    By default, it uses a SSH public key located at `~/.ssh/id_rsa.pub`. To use a different key, pass the *sshPublicKeyPath* parameter to the installation script.
 
     Take note of all the outputs of the installation scripts since it lists key information on your network structure and on access information for all your VMs.
 
