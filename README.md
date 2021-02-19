@@ -22,7 +22,7 @@ In this sample, we will simulate in Azure a Purdue network, industrial assets an
             az --version
             ```
 
-        - If not yet installed, install it:
+        - If not yet installed, add it:
 
             ```bash
             az extension add --name azure-iot
