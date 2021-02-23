@@ -64,18 +64,22 @@ echo "==========================================================="
 echo "==	        Locking down Purdue Network      	  =="
 echo "==========================================================="
 
-echo "Removing Rules with Prefix 'ToRemove_'..."
+echo "Removing rules with Prefix 'ToRemove_'..."
 echo ""
 nsgListOutput=($(az network nsg list --resource-group $networkResourceGroupName --query '[].name' -o tsv))
 
+rulesToDelete=""
 for nsgName in "${nsgListOutput[@]}" 
 do
-	rulesToRemove=($(az network nsg rule list --resource-group $networkResourceGroupName --nsg-name $nsgName --query "[?name.contains(@, 'ToRemove_')].name" -o tsv))
-	for ruleName in "${rulesToRemove[@]}" 
+    echo "...$nsgName"
+	rulesToRemoveIds=($(az network nsg rule list --resource-group $networkResourceGroupName --nsg-name $nsgName --query "[?name.contains(@, 'ToRemove_')].id" -o tsv))
+	for ruleId in "${rulesToRemoveIds[@]}" 
 	do
-		echo "...$nsgName::$ruleName"
-		az network nsg rule delete --resource-group $networkResourceGroupName --nsg-name $nsgName --name $ruleName
+		rulesToDelete="$rulesToDelete $ruleId"
 	done
 done
+az network nsg rule delete --resource-group $networkResourceGroupName --ids $rulesToDelete
+
+echo "done."
 echo ""
-echo "Done. VMs in lower layers no longer have internet access."
+echo "VMs in lower layers no longer have internet access."
