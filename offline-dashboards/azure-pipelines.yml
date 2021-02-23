@@ -44,6 +44,22 @@ stages:
           (Get-Content $path) -replace "#SQLEDGE_ADMIN_PASSWORD#", $env:SQLEDGE_ADMIN_PASSWORD | out-file $path    
       displayName: build initdb.sh
 
+    # dump env variables
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(AZURE_SERVICE_CONNECTION)
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          (gci env:*).GetEnumerator() | Sort-Object Name | Out-String
+          Write-Host "Dir Contents:<current directory> ================================================================================"
+          Get-ChildItem -Recurse
+          Write-Host "Dir Contents `$AGENT_WORKFOLDER:$AGENT_WORKFOLDER ================================================================================"
+          Get-ChildItem -Path $AGENT_WORKFOLDER -Recurse
+          Write-Host "Dir Contents `$AGENT_BUILDDIRECTORY:$AGENT_BUILDDIRECTORY ================================================================================"
+          Get-ChildItem -Path $AGENT_BUILDDIRECTORY -Recurse
+      displayName: dump env variables
+
     # build publishedNodes.json
     - task: AzureCLI@2
       inputs:
@@ -62,22 +78,6 @@ stages:
           }
           $publishedNodes | ConvertTo-Json -depth 32 | Set-Content '$(ROOT_DIR)/modules/opcpublisher/publishedNodes.json' 
       displayName: build publishedNodes.json
-
-    # dump env variables
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: $(AZURE_SERVICE_CONNECTION)
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          (gci env:*).GetEnumerator() | Sort-Object Name | Out-String
-          Write-Host "Dir Contents:<current directory> ================================================================================"
-          Get-ChildItem -Recurse
-          Write-Host "Dir Contents `$AGENT_WORKFOLDER:$AGENT_WORKFOLDER ================================================================================"
-          Get-ChildItem -Path $AGENT_WORKFOLDER -Recurse
-          Write-Host "Dir Contents `$AGENT_BUILDDIRECTORY:$AGENT_BUILDDIRECTORY ================================================================================"
-          Get-ChildItem -Path $AGENT_BUILDDIRECTORY -Recurse
-      displayName: dump env variables
 
     # Build Modules Grafana and SqlEdge
     - task: AzureIoTEdge@2
