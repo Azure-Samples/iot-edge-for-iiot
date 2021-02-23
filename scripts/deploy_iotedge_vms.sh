@@ -6,10 +6,12 @@ function show_help() {
    echo
    echo "Syntax: ./deploy_iotedge_vms.sh [-flag parameter]"
    echo ""
+   echo "Required list of flags:"
+   echo "-sshPublicKeyPath     File path to SSH public key that should be used to connect to the IoT Edge VMs from the jump box. Install script auto-generate this key from the jump box."
+   echo ""
    echo "List of optional flags:"
    echo "-h                Print this help."
    echo "-adminUsername    Administrator username of the Azure VMs to deploy. Default: iotedgeadmin."
-   echo "-adminPassword    Administrator password of the Azure VMs to deploy."
    echo "-c                Path to configuration file with IoT Edge devices information. Default: ../config.txt."
    echo "-l                Azure region to deploy resources to. Default: eastus."
    echo "-n                Name of the Azure Virtual Network with the Purdue Network. Default: PurdueNetwork."
@@ -106,11 +108,11 @@ while :; do
         -adminUsername=?*)
             adminUsername=${1#*=}
             ;;
-        -adminPassword=)
-            echo "Missing VM adminitrator password. Exiting."
+        -sshPublicKeyPath=)
+            echo "Missing path to jump box SSH public key. Exiting."
             exit;;
-        -adminPassword=?*)
-            adminPassword=${1#*=}
+        -sshPublicKeyPath=?*)
+            sshPublicKeyPath=${1#*=}
             ;;
         --)
             shift
@@ -130,6 +132,10 @@ if [ -z ${configFilePath} ]; then
     echo "Missing configuration file path. Exiting."
     exit 1
 fi
+if [ -z $sshPublicKeyPath ]; then
+    echo "Missing file path to SSH public key. Exiting."
+    exit 1
+fi
 
 # Prepare CLI
 if [ ! -z $subscription ]; then
@@ -139,7 +145,7 @@ fi
 # echo "Executing script with Azure Subscription: ${subscriptionName}" 
 
 echo "==========================================================="
-echo "==	          IoT Edge VMs                         =="
+echo "==	            IoT Edge VMs                         =="
 echo "==========================================================="
 echo ""
 
@@ -157,30 +163,25 @@ source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
 #Deploy IoT Edge VMs
 iotedgeDeployFilePath="${scriptFolder}/ARM-templates/iotedgedeploy.json"
-if [ ! -z $adminPassword ]; then
-    iotedgeVMsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iotedgeResourceGroupName --template-file "$iotedgeDeployFilePath" --parameters \
+sshPublicKey=$(cat $sshPublicKeyPath)
+iotedgeVMsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iotedgeResourceGroupName --template-file "$iotedgeDeployFilePath" --parameters \
         networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM ${iotEdgeDevicesSubnets[@]})" \
-        machineNames="$(passArrayToARM ${iotEdgeDevices[@]})" machineAdminName="$adminUsername" machineAdminPassword="$adminPassword" vmSize="$vmSize" \
-        --query "properties.outputs.vms.value[].[iotEdgeVmMachineName, iotEdgeVmMachinePrivateIPAddress, iotEdgeVmAdminUsername, iotEdgeVmAdminPassword]" -o tsv)
-else
-    iotedgeVMsOutput=$(az deployment group create --name iotedgeDeployment --resource-group $iotedgeResourceGroupName --template-file "$iotedgeDeployFilePath" --parameters \
-        networkName="$networkName" networkResourceGroupName="$networkResourceGroupName" subnetNames="$(passArrayToARM ${iotEdgeDevicesSubnets[@]})" \
-        machineNames="$(passArrayToARM ${iotEdgeDevices[@]})" machineAdminName="$adminUsername" vmSize="$vmSize" \
-        --query "properties.outputs.vms.value[].[iotEdgeVmMachineName, iotEdgeVmMachinePrivateIPAddress, iotEdgeVmAdminUsername, iotEdgeVmAdminPassword]" -o tsv)
-fi
+        machineNames="$(passArrayToARM ${iotEdgeDevices[@]})" machineAdminName="$adminUsername" machineAdminSshPublicKey="${sshPublicKey}" vmSize="$vmSize" \
+        --query "properties.outputs.vms.value[].[iotEdgeVmMachineName, iotEdgeVmMachinePrivateIPAddress, iotEdgeVmAdminUsername]" -o tsv)
 
 echo "IoT Edge VMs created. Key values:"
 echo ""
 iotedgeVMsOutputs=($iotedgeVMsOutput)
-for (( i=0; i<${#iotedgeVMsOutputs[@]}-1; i+=4))
+for (( i=0; i<${#iotedgeVMsOutputs[@]}-1; i+=3))
 do
     echo ""
     echo "IoT Edge VM machine name:       ${iotedgeVMsOutputs[i]}"
-    echo "IoT Edge VM Private IP address: ${iotedgeVMsOutputs[i+1]}"
-    echo "IoT Edge VM user name:          ${iotedgeVMsOutputs[i+2]}"
-    echo "IoT Edge VM password:           ${iotedgeVMsOutputs[i+3]}"
-    echo "IoT Edge VM ssh:                ssh ${iotedgeVMsOutputs[i+2]}@${iotedgeVMsOutputs[i]}"
+    echo "IoT Edge VM private IP address: ${iotedgeVMsOutputs[i+1]}"
+    echo "IoT Edge VM username:           ${iotedgeVMsOutputs[i+2]}"
+    echo "IoT Edge VM SSH:                ssh ${iotedgeVMsOutputs[i+2]}@${iotedgeVMsOutputs[i]}"
 done
 echo ""
 echo ""
-echo "Please remember that there have been outbound security rules enabled on the NSGs that have been added for ease of post setup, please remember or run the lockdown_purdue.sh script next."
+echo "IoT Edge VMs can still access internet at this point to enable their configuration."
+echo "Please wait until completion of the install script or run the lockdown_purdue.sh script manually to lock down the Purdue network."
+echo ""

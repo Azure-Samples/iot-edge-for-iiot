@@ -5,11 +5,9 @@ inputFilePath=$1
 outputFilePath=$2
 envVariables=()
 envVariableSubstitutes=()
-#echo "Replacing file ${inputFilePath} with the following environment variables:"
 for i in ${@:3}; do
     envVariables+=("\$$i")
     envVariableSubstitutes+=($(printenv $i))
-    #echo "  $i=$(printenv $i)"
 done
 
 # Verifying that arguments look correct
@@ -33,8 +31,7 @@ fi
 # Substituting the environment variables by their values:
 sedInstruction=""
 for ((i = 0; i < ${#envVariables[@]}; ++i)); do
-    sedInstruction="${sedInstruction}s/${envVariables[i]}/${envVariableSubstitutes[i]}/;"
+    sedInstruction="${sedInstruction}s|${envVariables[i]}|${envVariableSubstitutes[i]}|;"
 done
 sed ${sedInstruction} $inputFilePath > $outputFilePath
-#echo "Substitution made in file ${outputFilePath}."
 
