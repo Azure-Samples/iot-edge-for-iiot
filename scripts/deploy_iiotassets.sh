@@ -150,6 +150,15 @@ echo "==	                  IIOT assets                    =="
 echo "==========================================================="
 echo ""
 
+# Load IIOT assets to deploy from config file
+source ${scriptFolder}/parseConfigFile.sh $configFilePath
+
+if [ ${#iiotAssets[@]} -eq 0 ]; then
+    echo "No IIOT assets to deploy per the config file."
+    echo ""
+    exit
+else
+
 if ( $(az group exists -n "$iiotAssetsResourceGroupName") )
 then
   echo "Existing IIOT assets resource group found: $iiotAssetsResourceGroupName"
@@ -158,9 +167,6 @@ else
   echo "IIOT assets resource group: $iiotAssetsResourceGroupName "
 fi
 echo ""
-
-# Load IIOT assets to deploy from config file
-source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
 #Deploy IIOT assets
 opcuaDeployFilePath="${scriptFolder}/ARM-templates/opcuadeploy.json"
