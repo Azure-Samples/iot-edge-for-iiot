@@ -78,7 +78,7 @@ do
 		rulesToDelete="$rulesToDelete $ruleId"
 	done
 done
-az network nsg rule delete --resource-group $networkResourceGroupName --ids $rulesToDelete
+az network nsg rule delete --ids $rulesToDelete --output none
 
 echo "done."
 echo ""
