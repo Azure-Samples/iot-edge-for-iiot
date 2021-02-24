@@ -4,6 +4,7 @@
 
 /.vscode/*
 
+/ACR.env
 /todo.txt
 /scripts/.jbSshPublicKey
 
