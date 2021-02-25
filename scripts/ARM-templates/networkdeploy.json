@@ -59,7 +59,8 @@
     "PortProxy": "3128",
     "PortAmqps": "5671",
     "PortOPC1": "54845",
-    "PortOPC2": "54855"
+    "PortOPC2": "54855",
+    "PortGrafana": "3000"
   },
   "resources": 
   [
@@ -164,7 +165,7 @@
               "description": "Allow Inbound Routing - May want to limit to CIDR",	    
               "protocol": "*",	    
               "sourcePortRange": "*",	    
-              "destinationPortRanges": [ "[variables('PortSsh')]", "[variables('PortRdp')]" ],	    
+              "destinationPortRanges": [ "[variables('PortSsh')]", "[variables('PortRdp')]", "[variables('PortGrafana')]" ],	    
               "sourceAddressPrefix": "[variables('SupportSourceAddress')]",	    
               "destinationAddressPrefix": "*",	    
               "access": "Allow",	    
