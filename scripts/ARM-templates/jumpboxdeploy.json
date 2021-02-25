@@ -113,7 +113,7 @@
         {
           "computerName": "[parameters('machineName')]",
           "adminUsername": "[parameters('machineAdminName')]",
-          "customData": "[base64(concat('#cloud-config\n\npackage_update: true\npackage_upgrade: true\npackages:\n  - curl\n  - nginx\nwrite_files:\n  - owner: www-data:www-data\n    path: /etc/nginx/sites-available/default\n content: |\n      server {\n        listen 80;\n        listen [::]:80;\n\n        access_log /var/log/nginx/reverse-access.log;\n        error_log /var/log/nginx/reverse-error.log;\n\n        location / {\n proxy_pass http://10.16.7.4:3000;;\n        }\n      }\nruncmd:\n  - service nginx restart\n  - |\n      set -x\n      (\n        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash\n      ) &'))]",
+          "customData": "[base64(concat('#cloud-config\npackage_upgrade: true\npackages:\n  - curl\n  - nginx\nwrite_files:\n  - owner: www-data:www-data\n    path: /etc/nginx/sites-available/default\n    content: |\n      server {\n            listen 3000;\n\n            access_log /var/log/nginx/reverse-access.log;\n            error_log /var/log/nginx/reverse-error.log;\n\n            location / {\n                proxy_pass http://10.16.7.4:3000;\n            }\n        }\nruncmd:\n  - service nginx restart\n  - |\n      set -x\n      (\n        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash\n      ) &\n'))]",
           "linuxConfiguration": {
             "disablePasswordAuthentication": true,
             "ssh": {

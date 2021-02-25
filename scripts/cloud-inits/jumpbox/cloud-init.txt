@@ -1,6 +1,4 @@
 #cloud-config
-
-package_update: true
 package_upgrade: true
 packages:
   - curl
@@ -10,16 +8,15 @@ write_files:
     path: /etc/nginx/sites-available/default
     content: |
       server {
-        listen 80;
-        listen [::]:80;
+            listen 3000;
 
-        access_log /var/log/nginx/reverse-access.log;
-        error_log /var/log/nginx/reverse-error.log;
+            access_log /var/log/nginx/reverse-access.log;
+            error_log /var/log/nginx/reverse-error.log;
 
-        location / {
-                    proxy_pass http://10.16.7.4:3000;;
+            location / {
+                proxy_pass http://10.16.7.4:3000;
+            }
         }
-      }
 runcmd:
   - service nginx restart
   - |
