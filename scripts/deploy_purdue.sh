@@ -158,7 +158,7 @@ fi
 jumpboxDeployFilePath="${scriptFolder}/ARM-templates/jumpboxdeploy.json"
 sshPublicKey=$(eval cat $sshPublicKeyPath)
 jumpBoxOutput=$(az deployment group create --name PurdueJumpBoxDeployment --resource-group ${jumpboxResourceGroupName} --template-file "$jumpboxDeployFilePath" --parameters \
-    networkName="${networkName}" subnetName='999-Demo-Support' networkResourceGroupName="${networkResourceGroupName}" machineName="jumpbox" machineAdminSshPublicKey="${sshPublicKey}"\
+    networkName="${networkName}" subnetName='999-Demo-Support' networkResourceGroupName="${networkResourceGroupName}" machineName="jumpbox" machineAdminSshPublicKey="${sshPublicKey}" vmSize="$vmSize"\
     --query "properties.outputs.[adminUsername.value, fqdn.value]" -o tsv)
 
 jumpBoxOutputs=($jumpBoxOutput)
@@ -195,7 +195,7 @@ fi
 proxyDeployFilePath="${scriptFolder}/ARM-templates/proxydeploy.json"
 proxyOutputs=($(az deployment group create --name PurdueProxyDeployment --resource-group ${proxyResourceGroupName} --template-file "$proxyDeployFilePath" --parameters \
     networkResourceGroupName="${networkResourceGroupName}" networkName="${networkName}" itProxySubnetName='8-IT-Dmz' otProxySubnetName='5-OT-Dmz' \
-    itProxyMachineName="itproxy" otProxyMachineName="otproxy" itProxyMachineAdminSshPublicKey="${jbSshPublicKey}" otProxyMachineAdminSshPublicKey="${jbSshPublicKey}"\
+    itProxyMachineName="itproxy" otProxyMachineName="otproxy" itProxyMachineAdminSshPublicKey="${jbSshPublicKey}" otProxyMachineAdminSshPublicKey="${jbSshPublicKey}"  vmSize="$vmSize"\
     --query "properties.outputs.[itProxyMachineName.value, itProxyPrivateIpAddress.value, itProxyAdminUsername.value, otProxyMachineName.value, otProxyPrivateIpAddress.value, otProxyAdminUsername.value]" -o tsv))
 
 itProxyMachineName=${proxyOutputs[0]}
