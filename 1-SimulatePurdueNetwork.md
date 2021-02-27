@@ -11,7 +11,7 @@ In this first part, we'll simulate in Azure a Purdue network, industrial assets 
 - An **IoT Hub** that supports IoT Edge devices (F1 SKU --which is free--, S1, S2 or S3) in the same subscription.
 - An **Azure Container Registry (ACR)** (Basic SKU --starting at $0.17/day, see [this page](https://azure.microsoft.com/en-us/pricing/details/container-registry/) for more pricing info-- or above) in the same subscription.
 - An **SSH client**.
-- **[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) with the `azure-iot` CLI extension 0.10.6 or above** installed. We'll use the [Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview) in this tutorial for which only a browser is needed.
+- **[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) with the `azure-iot` CLI extension 0.10.6 or above** installed. We'll use a bash terminal from the [Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview) in this tutorial for which only a browser is needed.
     1. Open the [Azure Cloud Shell](https://shell.azure.com/) from your browser
     2. If you're using [Azure Cloud Shell](https://shell.azure.com/) for the first time, you'll be prompted to select a subscription to create a storage account and a Microsoft Azure Files share. Select Create storage to create a storage account for your Cloud Shell session information. This storage account is separate from resources used in this tutorial.
     3. Make sure that `azure-iot` CLI extension version `0.10.6` or above is installed in your Azure Cloud Shell:
@@ -74,19 +74,19 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
     ssh-keygen -m PEM -t rsa -b 4096
     ```
 
-- Configure your simulation or keep the default one that deploys 3 IoT Edge devices in layers L5, L4 and L3:
+- Customize your simulation or keep the default settings that deploys 3 IoT Edge devices in layers L5, L4 and L3:
 
     ```bash
     code config.txt
     ```
 
-    Here are some notes if you want to change the default configuration:
+    Here are some notes to change the default configuration:
 
-    - The network structure cannot be changed
-    - Add IoT Edge devices in each layer by listing out additional IoT Edge device names separated by a space
-    - Define their parents by appending their parent name under parenthesis
-    - Follow the naming restrictions listed in the configuration file header
-    - Modify deployment files that go through each layers
+    - The network layers are fixed
+    - You can add as many IoT Edge devices as you want in each layer by listing out additional IoT Edge device names separated by a space
+    - Define the parents of each nested IoT Edge device by appending their parent name under parenthesis
+    - Follow the naming restrictions listed in the configuration file
+    - Optionally, modify deployment files that go through each layers
 
     We'll assume that you're using the default configuration in the rest of this sample.
 
