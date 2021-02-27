@@ -17,6 +17,14 @@ In a second part, we'll remotely deploy workloads to IoT Edge devices in order t
 1. [Simulate an Purdue network, industial assets and a hierarchy of IoT Edge devices](1-SimulatePurdueNetwork.md) (30 mins)
 2. [Deploy workloads to collect, store and visualize data from industrial assets](2-DeployOfflineDashboard.md) (30 mins)
 
+<br>
+<br>
+<br>
+
+---
+
+<br>
+
 ## Contributing
 
 The project welcomes contributions and suggestions.  Most contributions require you to agree to a

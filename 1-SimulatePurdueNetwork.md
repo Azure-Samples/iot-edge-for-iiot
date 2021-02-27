@@ -3,8 +3,6 @@
 
 In this first part, we'll simulate in Azure a Purdue network, industrial assets and a hierarchy of IoT Edge gateways to acquire industrial data and upload it to the cloud securely without compromising the security of the network.
 
-![Simulated Purdue Network with default nested IoT Edge deployment](assets/SimulatedPurdueNetwork.svg)
-
 ## Pre-requisites
 
 - An **Azure account with a valid subscription**. When using the default simulation configuration, 7 Virtual Machines (VMs) and 1 Virtual Network (VNet) will be deployed in your subscription for a daily cost of **$3.54**. For more details, see this [Azure Pricing Estimate](https://azure.com/e/4df47d47440b43e78076078496e2c3d1).
@@ -46,8 +44,6 @@ In this first part, we'll simulate in Azure a Purdue network, industrial assets 
 ### Deploy the simulation
 
 To simulate a factory, the following scripts automate the deployment of a Purdue network, industrial assets and a hierarchy of IoT Edge gateways to acquire industrial data and upload their data securely without compromising the security of the Purdue Network.
-
-![Simulated Purdue Network with default nested IoT Edge deployment](assets/SimulatedPurdueNetwork.svg)
 
 From the [Azure Cloud Shell](https://shell.azure.com/):
 
