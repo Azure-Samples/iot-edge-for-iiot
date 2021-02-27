@@ -120,7 +120,7 @@ Here is a sneak peek at each of these dashboards:
 
 - Production at a glance:
 
-![Production at a glance dashboard](assets/ProductionAtAglance.png)
+![Production at a glance dashboard](assets/ProductionAtAGlance.png)
 
 
 ## Clean up
