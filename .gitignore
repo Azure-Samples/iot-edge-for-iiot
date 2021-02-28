@@ -4,7 +4,6 @@
 
 /.vscode/*
 
-ACR.env
 /todo.txt
 /scripts/.jbSshPublicKey
 /scripts/edgeDeployments/topLayerBaseDeploymentItProxy.json
