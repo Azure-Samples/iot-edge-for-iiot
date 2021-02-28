@@ -157,10 +157,9 @@ if [ ${#iiotAssets[@]} -eq 0 ]; then
     echo "No IIOT assets to deploy per the config file."
     echo ""
     exit
-else
+fi
 
-if ( $(az group exists -n "$iiotAssetsResourceGroupName") )
-then
+if ( $(az group exists -n "$iiotAssetsResourceGroupName") ); then
   echo "Existing IIOT assets resource group found: $iiotAssetsResourceGroupName"
 else
   az group create --name "$iiotAssetsResourceGroupName" --location "$location" --tags "$resourceGroupPrefix" "CreationDate"=$(date --utc +%Y%m%d_%H%M%SZ)  1> /dev/null

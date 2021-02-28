@@ -1,0 +1,15 @@
+{
+    "$schema-version": "0.0.1",
+    "description": "sqledge",
+    "image": {
+        "repository": "${ACR_ADDRESS}/${ACR_REPOSITORY}/sqledge",
+        "tag": {
+            "version": "${CONTAINER_VERSION_TAG}",
+            "platforms": {
+                "amd64": "./Dockerfile"
+            }
+        },
+        "buildOptions": [],
+        "contextPath": "./"
+    }
+}

@@ -57,7 +57,10 @@
     "PortHttp": "80",
     "PortHttps": "443",
     "PortProxy": "3128",
-    "PortAmqps": "5671"
+    "PortAmqps": "5671",
+    "PortOPC1": "54845",
+    "PortOPC2": "54855",
+    "PortGrafana": "3000"
   },
   "resources": 
   [
@@ -162,7 +165,7 @@
               "description": "Allow Inbound Routing - May want to limit to CIDR",	    
               "protocol": "*",	    
               "sourcePortRange": "*",	    
-              "destinationPortRanges": [ "[variables('PortSsh')]", "[variables('PortRdp')]" ],	    
+              "destinationPortRanges": [ "[variables('PortSsh')]", "[variables('PortRdp')]", "[variables('PortGrafana')]" ],	    
               "sourceAddressPrefix": "[variables('SupportSourceAddress')]",	    
               "destinationAddressPrefix": "*",	    
               "access": "Allow",	    
@@ -486,7 +489,7 @@
               "description": "Allow Inbound From L3",	    
               "protocol": "*",	    
               "sourcePortRange": "*",	    
-              "destinationPortRanges": [ "[variables('PortHttps')]", "[variables('PortHttp')]" ],	    
+              "destinationPortRanges": [ "[variables('PortHttps')]", "[variables('PortHttp')]", "[variables('PortOPC1')]", "[variables('PortOPC2')]"],	    
               "sourceAddressPrefix": "[variables('L3AddressCidr')]",	    
               "destinationAddressPrefix": "*",	    
               "access": "Allow",	    
@@ -649,7 +652,7 @@
               "description": "Allow Outbound to L2",	    
               "protocol": "*",	    
               "sourcePortRange": "*",	    
-              "destinationPortRanges": [ "[variables('PortHttps')]", "[variables('PortHttp')]", "[variables('PortMqtts')]", "[variables('PortMqtt')]", "[variables('PortModbosTcpSecurity')]", "[variables('PortModbus')]" ],	    
+              "destinationPortRanges": [ "[variables('PortHttps')]", "[variables('PortHttp')]", "[variables('PortMqtts')]", "[variables('PortMqtt')]", "[variables('PortModbosTcpSecurity')]", "[variables('PortModbus')]", "[variables('PortOPC1')]", "[variables('PortOPC2')]"],	    
               "sourceAddressPrefix": "*",	    
               "destinationAddressPrefix": "[variables('L2AddressCidr')]",	    
               "access": "Allow",	    

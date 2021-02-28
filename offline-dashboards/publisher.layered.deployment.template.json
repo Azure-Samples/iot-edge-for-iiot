@@ -1,0 +1,16 @@
+{
+    "modulesContent": {
+        "$edgeAgent": {
+            "properties.desired.modules.opcpublisher": {
+                "settings": {
+                    "image": "#MODULES.opcpublisher#",
+                    "createOptions": "{\"Hostname\":\"publisher\",\"Cmd\":[\"--pf=\/app\/pn.json\",\"--aa\",\"--loglevel=verbose\"]}"
+                },
+                "type": "docker",
+                "status": "running",
+                "restartPolicy": "always",
+                "version": "1.0"
+            }
+        }
+    }
+}
