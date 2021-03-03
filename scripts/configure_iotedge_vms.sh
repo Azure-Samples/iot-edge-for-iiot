@@ -163,14 +163,24 @@ for (( i=0; i<${#iotEdgeDevices[@]}; i++))
 do
     echo "...${iotEdgeDevices[$i]}"
 
-    az vm extension set \
-    --resource-group $iotEdgeVMsResourceGroup \
-    --vm-name ${iotEdgeDevices[$i]} \
-    --name customScript \
-    --publisher Microsoft.Azure.Extensions \
-    --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/CustomScripts/installTestCertificates.sh"],"commandToExecute": "./installTestCertificates.sh \"'${iotEdgeDevices[$i]}'\""}' \
-    --output none \
-    --no-wait
+    if [ $i -eq ${#iotEdgeDevices[@]} ]; then
+        az vm extension set \
+        --resource-group $iotEdgeVMsResourceGroup \
+        --vm-name ${iotEdgeDevices[$i]} \
+        --name customScript \
+        --publisher Microsoft.Azure.Extensions \
+        --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/CustomScripts/installTestCertificates.sh"],"commandToExecute": "./installTestCertificates.sh \"'${iotEdgeDevices[$i]}'\""}' \
+        --output none
+    else
+        az vm extension set \
+        --resource-group $iotEdgeVMsResourceGroup \
+        --vm-name ${iotEdgeDevices[$i]} \
+        --name customScript \
+        --publisher Microsoft.Azure.Extensions \
+        --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/CustomScripts/installTestCertificates.sh"],"commandToExecute": "./installTestCertificates.sh \"'${iotEdgeDevices[$i]}'\""}' \
+        --output none \
+        --no-wait
+    fi
 done
 echo "done"
 echo ""
