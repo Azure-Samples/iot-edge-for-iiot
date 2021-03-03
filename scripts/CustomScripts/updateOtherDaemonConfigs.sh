@@ -46,12 +46,12 @@ fi
 
 # Waiting for IoT Edge installation to be complete
 i=0
-iotedgeConfigFile="/etc/iotedge/config.yaml"
+iotedgeConfigFile="/etc/aziot/config.toml.edge.template"
 while [[ ! -f "$iotedgeConfigFile" ]]; do
     echo "Waiting 10s for IoT Edge to complete its installation"
     sleep 10
     ((i++))
-    if [ $i -gt 30 ]; then
+    if [ $i -gt 100 ]; then
         echo "Something went wrong in the installation of IoT Edge. Please install IoT Edge first. Exiting."
         exit 1
    fi
@@ -76,41 +76,41 @@ echo ""
 
 # Configuring IoT Edge
 echo "Updating the device connection string"
-sudo sed -i "s#\(device_connection_string: \).*#\1\"$dcs\"#g" /etc/iotedge/config.yaml
+sudo sed -i "40s|.*|[provisioning]|" /etc/aziot/config.toml
+sudo sed -i "41s|.*|source = \"manual\"|" /etc/aziot/config.toml
+sudo sed -i "42s|.*|connection_string = \"$dcs\"|" /etc/aziot/config.toml
 
 echo "Updating the device hostname"
-sudo sed -i "224s/.*/hostname: \"$fqdn\"/" /etc/iotedge/config.yaml
+sudo sed -i "7s|.*|hostname = \"$fqdn\"|" /etc/aziot/config.toml
 
 if [ ! -z $parentFqdn ]; then
     echo "Updating the parent hostname"
-    sudo sed -i "237s/.*/parent_hostname: \"$parentFqdn\"/" /etc/iotedge/config.yaml
+    sudo sed -i "17s|.*|parent_hostname = \"$parentFqdn\"|" /etc/aziot/config.toml
 fi
 
 echo "Updating the version of the bootstrapping edgeAgent to be the public preview one"
 if [ -z $parentFqdn ]; then
-    edgeAgentImage="$acrAddress:443/azureiotedge-agent:1.2.0-rc2"
+    edgeAgentImage="$acrAddress:443/azureiotedge-agent:1.2.0-rc4"
 else
-    edgeAgentImage="$parentFqdn:443/azureiotedge-agent:1.2.0-rc2"
+    edgeAgentImage="$parentFqdn:443/azureiotedge-agent:1.2.0-rc4"
 fi
-sudo sed -i "207s|.*|    image: \"${edgeAgentImage}\"|" /etc/iotedge/config.yaml
+sudo sed -i "190s|.*|image = \"${edgeAgentImage}\"|" /etc/aziot/config.toml
 
 if [ -z $parentFqdn ]; then
     echo "Adding ACR credentials for IoT Edge daemon to download the bootstrapping edgeAgent"
-    sudo sed -i "208s|.*|    auth:|" /etc/iotedge/config.yaml
-    sed -i "209i\      serveraddress: \"${acrAddress}\"" /etc/iotedge/config.yaml
-    sed -i "210i\      username: \"${acrUsername}\"" /etc/iotedge/config.yaml
-    sed -i "211i\      password: \"${acrPassword}\"" /etc/iotedge/config.yaml
+    sudo sed -i "193s|.*|[agent.config.auth]|" /etc/aziot/config.toml
+    sudo sed -i "194s|.*|serveraddress = \"${acrAddress}\"|" /etc/aziot/config.toml
+    sudo sed -i "195s|.*|username = \"${acrUsername}\"|" /etc/aziot/config.toml
+    sudo sed -i "196s|.*|password = \"${acrPassword}\"|" /etc/aziot/config.toml
 fi
 
-#echo "Configuring the bootstrapping edgeAgent to use AMQP/WS"
-#sudo sed -i "205s|.*|  env:|" /etc/iotedge/config.yaml
-sudo sed -i "206i\#    UpstreamProtocol: \"AmqpWs\"" /etc/iotedge/config.yaml
+echo "Configuring the bootstrapping edgeAgent to use AMQP/WS"
+sudo sed -i "200s|.*|\"UpstreamProtocol\" = \"AmqpWs\"|" /etc/aziot/config.toml
 
 if [ ! -z $proxySettings ]; then
     echo "Configuring the bootstrapping edgeAgent to use http proxy"
-    sudo sed -i "205s|.*|  env:|" /etc/iotedge/config.yaml
     httpProxyAddress=$(echo $proxySettings | cut -d "=" -f2-)
-    sudo sed -i "207i\    https_proxy: \"${httpProxyAddress}\"" /etc/iotedge/config.yaml
+    sudo sed -i "201s|.*|\"https_proxy\" = \"${httpProxyAddress}\"|" /etc/aziot/config.toml
 
     echo "Adding proxy configuration to docker"
     sudo mkdir -p /etc/systemd/system/docker.service.d/
@@ -121,15 +121,18 @@ if [ ! -z $proxySettings ]; then
     sudo systemctl restart docker
 
     echo "Adding proxy configuration to IoT Edge daemon"
-    sudo mkdir -p /etc/systemd/system/iotedge.service.d/
+    sudo mkdir -p /etc/systemd/system/aziot-identityd.service.d/
     { echo "[Service]";
-    echo "Environment=${proxySettings}";
-    } | sudo tee /etc/systemd/system/iotedge.service.d/proxy.conf
+    echo "Environment=\"${proxySettings}\"";
+    } | sudo tee /etc/systemd/system/aziot-identityd.service.d/proxy.conf
+    sudo mkdir -p /etc/systemd/system/aziot-edged.service.d/
+    { echo "[Service]";
+    echo "Environment=\"${proxySettings}\"";
+    } | sudo tee /etc/systemd/system/aziot-edged.service.d/proxy.conf
     sudo systemctl daemon-reload
 fi
 
 echo "Restarting IoT Edge to apply new configuration"
-sudo systemctl unmask iotedge
-sudo systemctl start iotedge
+sudo iotedge config apply
 
 echo "Done."

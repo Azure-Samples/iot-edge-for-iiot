@@ -82,11 +82,11 @@ acrName="${ACR_ADDRESS/.azurecr.io/}"
 echo "Importing container images to ACR ${acrName}"
 echo ""
 echo "edgeAgent..."
-az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-agent:1.2.0-rc2 --image azureiotedge-agent:1.2.0-rc2
+az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-agent:1.2.0-rc4 --image azureiotedge-agent:1.2.0-rc4
 echo "edgeHub..."
-az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-hub:1.2.0-rc2 --image azureiotedge-hub:1.2.0-rc2
+az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-hub:1.2.0-rc4 --image azureiotedge-hub:1.2.0-rc4
 echo "diagnostics..."
-az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-diagnostics:1.2.0-rc2 --image azureiotedge-diagnostics:1.2.0-rc2
+az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-diagnostics:1.2.0-rc4 --image azureiotedge-diagnostics:1.2.0-rc4
 echo "API proxy..."
 az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-api-proxy:latest --image azureiotedge-api-proxy:latest
 echo "Simulated temperature sensor..."

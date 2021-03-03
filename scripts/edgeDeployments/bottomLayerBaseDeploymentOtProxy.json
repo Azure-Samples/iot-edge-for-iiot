@@ -16,11 +16,13 @@
           "edgeAgent": {
             "type": "docker",
             "settings": {
-              "image": "$upstream:443/azureiotedge-agent:1.2.0-rc2",
+              "image": "$upstream:443/azureiotedge-agent:1.2.0-rc4",
               "createOptions": "{}"
             },
-            "https_proxy": {	
-              "value": "http://10.16.5.4:3128"
+            "env": {	
+              "https_proxy": {	
+                "value": "http://10.16.5.4:3128"
+              }
             }
           },
           "edgeHub": {
@@ -28,7 +30,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "$upstream:443/azureiotedge-hub:1.2.0-rc2",
+              "image": "$upstream:443/azureiotedge-hub:1.2.0-rc4",
               "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"5671\/tcp\": [{\"HostPort\": \"5671\"}],\"8883\/tcp\": [{\"HostPort\": \"8883\"}],\"443\/tcp\": [{\"HostPort\": \"443\"}]}}}"
             },	
             "env": {	
