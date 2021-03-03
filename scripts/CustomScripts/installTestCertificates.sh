@@ -17,7 +17,7 @@ while [[ ! -f "$iotedgeConfigFile" ]]; do
     echo "Waiting 10s for IoT Edge to complete its installation"
     sleep 10
     ((i++))
-    if [ $i -gt 30 ]; then
+    if [ $i -gt 100 ]; then
         echo "Something went wrong in the installation of IoT Edge. Please install IoT Edge first. Exiting."
         exit 1
    fi
