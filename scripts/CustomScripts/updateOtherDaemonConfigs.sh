@@ -121,15 +121,18 @@ if [ ! -z $proxySettings ]; then
     sudo systemctl restart docker
 
     echo "Adding proxy configuration to IoT Edge daemon"
-    sudo mkdir -p /etc/systemd/system/iotedge.service.d/
+    sudo mkdir -p /etc/systemd/system/aziot-identityd.service.d/
     { echo "[Service]";
-    echo "Environment=${proxySettings}";
-    } | sudo tee /etc/systemd/system/iotedge.service.d/proxy.conf
+    echo "Environment=\"${proxySettings}\"";
+    } | sudo tee /etc/systemd/system/aziot-identityd.service.d/proxy.conf
+    sudo mkdir -p /etc/systemd/system/aziot-edged.service.d/
+    { echo "[Service]";
+    echo "Environment=\"${proxySettings}\"";
+    } | sudo tee /etc/systemd/system/aziot-edged.service.d/proxy.conf
     sudo systemctl daemon-reload
 fi
 
 echo "Restarting IoT Edge to apply new configuration"
-sudo systemctl unmask iotedge
-sudo systemctl start iotedge
+sudo iotedge config apply
 
 echo "Done."

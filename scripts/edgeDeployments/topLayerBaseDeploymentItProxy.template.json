@@ -24,8 +24,10 @@
               "image": "$ACR_ADDRESS/azureiotedge-agent:1.2.0-rc4",
               "createOptions": "{}"
             },
-            "https_proxy": {	
-              "value": "http://10.16.8.4:3128"
+            "env": {	
+              "https_proxy": {	
+                "value": "http://10.16.8.4:3128"
+              }
             }
           },
           "edgeHub": {

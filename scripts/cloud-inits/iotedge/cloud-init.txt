@@ -37,8 +37,7 @@ runcmd:
           sleep 3
         done
 
-        # Prevent iotedge from starting before the device connection string is set in config file
-        sudo ln -s /dev/null /etc/systemd/system/iotedge.service
+        # Install IoT Edge
         sudo wget -O aziot-identity-service_1.2.0-rc4_ubuntu-18.04_amd64.deb "https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/rc4/scripts/assets/aziot-identity-service_1.2.0-rc4_ubuntu-18.04_amd64.deb"
         sudo wget -O aziot-edge_1.2.0.rc4-1_ubuntu18.04_amd64.deb "https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/rc4/scripts/assets/aziot-edge_1.2.0.rc4-1_ubuntu18.04_amd64.deb"
         sudo dpkg -i aziot-identity-service_1.2.0-rc4_ubuntu-18.04_amd64.deb

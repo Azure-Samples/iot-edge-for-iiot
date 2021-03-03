@@ -19,8 +19,10 @@
               "image": "$upstream:443/azureiotedge-agent:1.2.0-rc4",
               "createOptions": "{}"
             },
-            "https_proxy": {	
-              "value": "http://10.16.5.4:3128"
+            "env": {	
+              "https_proxy": {	
+                "value": "http://10.16.5.4:3128"
+              }
             }
           },
           "edgeHub": {
