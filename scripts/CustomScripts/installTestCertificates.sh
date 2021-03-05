@@ -7,12 +7,12 @@ if [ -z $1 ]; then
         echo "Missing deviceId. Please pass a deviceId as a parameter. Exiting."
         exit 1
 fi
-echo "Setting up test nested edge configuration for IoT Edge device $deviceId"
+echo "Setting up test certificates for IoT Edge device $deviceId"
 echo ""
 
 # Waiting for IoT Edge installation to be complete
 i=0
-iotedgeConfigFile="/etc/aziot/config.toml.edge.template"
+iotedgeConfigFile="/etc/aziot/config.toml"
 while [[ ! -f "$iotedgeConfigFile" ]]; do
     echo "Waiting 10s for IoT Edge to complete its installation"
     sleep 10

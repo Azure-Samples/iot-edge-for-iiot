@@ -46,7 +46,7 @@ fi
 
 # Waiting for IoT Edge installation to be complete
 i=0
-iotedgeConfigFile="/etc/aziot/config.toml.edge.template"
+iotedgeConfigFile="/etc/aziot/config.toml"
 while [[ ! -f "$iotedgeConfigFile" ]]; do
     echo "Waiting 10s for IoT Edge to complete its installation"
     sleep 10
