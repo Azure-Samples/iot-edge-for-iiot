@@ -106,7 +106,7 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
 
     The reminder of the installation scripts provisions the IoT Edge devices in your IoT hub, configures the IoT Edge devices by installing test certificates and updating their IoT Edge configuration files, locks down the network so that VMs no longer have internet access once they are done with their configuration scripts (that comes from the internet) and finally deploys base workloads to IoT Edge devices via IoT hub.
 
-    By default, *Azure VM B1ms* are used for all the VMs, e.g. 1vCPU, 2Gb RAM, 4GB storage VMs. To simulate heavy loads, upgrade to more powerful VMs by passing the *vmSize* parameters to the installation script.
+    By default, *Azure VM B1ms* are used for all the VMs, e.g. 1vCPU, 2Gb RAM, 4GB storage VMs. To simulate heavy loads or *Azure VM B1ms* are not responsive enough for you, upgrade to more powerful VMs by passing the *vmSize* parameter to the installation script such as `vmSize=Standard_D3_v2`.
 
     By default, it uses a SSH public key located at `~/.ssh/id_rsa.pub`. To use a different key, pass the *sshPublicKeyPath* parameter to the installation script.
 
