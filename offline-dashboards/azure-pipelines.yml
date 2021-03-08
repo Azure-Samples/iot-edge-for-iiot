@@ -42,6 +42,10 @@ stages:
         script: |
           $path="$(ROOT_DIR)/modules/sqledge/initdb.sh"
           (Get-Content $path) -replace "#SQLEDGE_ADMIN_PASSWORD#", $env:SQLEDGE_ADMIN_PASSWORD | out-file $path    
+          $path="$(ROOT_DIR)/modules/sqledge/dbinit.sql"
+          (Get-Content $path) -replace "#SQLEDGE_ADMIN_PASSWORD#", $env:SQLEDGE_ADMIN_PASSWORD | out-file $path    
+          $path="$(ROOT_DIR)/modules/grafana/grafana-provisioning/datasources/datasource.yml"
+          (Get-Content $path) -replace "#SQLEDGE_ADMIN_PASSWORD#", $env:SQLEDGE_ADMIN_PASSWORD | out-file $path    
       displayName: build initdb.sh
 
     # dump env variables
