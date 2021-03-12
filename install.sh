@@ -128,7 +128,7 @@ echo ""
 if [ ! -z $subscription ]; then
   az account set --subscription $subscription
 fi
-subscription=$(az account show --query 'name' -o tsv)
+subscription=$(az account show --query 'id' -o tsv)
 echo "Executing script with Azure Subscription: ${subscription}" 
 echo ""
 echo "==========================================================="
