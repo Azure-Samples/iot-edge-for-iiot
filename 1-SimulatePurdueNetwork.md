@@ -157,7 +157,7 @@ As an example, we'll add this [Simulated Temperature Sensor](https://azuremarket
 
 - Choose the **Simulated Temperature Sensor** module from the IoT Edge Module Marketplace page.
 - Click on its name to edit its settings
-- Under *Module Settings*, replace its **imageURI** to `$upstream:443/azureiotedge-simulated-temperature-sensor:1.0`
+- Under *Module Settings*, replace its **imageURI** to `$upstream:443/azureiotedge-simulated-temperature-sensor:latest`
 - Click on **Review+Create** and **Confirm**
 
 An updated deployment is now on-going for `L3-edge` device.
