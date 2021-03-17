@@ -4,7 +4,7 @@
             "properties.desired.modules.opcpublisher": {
                 "settings": {
                     "image": "#MODULES.opcpublisher#",
-                    "createOptions": "{\"Hostname\":\"publisher\",\"Cmd\":[\"--pf=\/app\/pn.json\",\"--aa\",\"--loglevel=verbose\"]}"
+                    "createOptions": "{\"Hostname\":\"publisher\",\"Cmd\":[\"--pf=\/app\/pn.json\",\"--aa\"]}"
                 },
                 "type": "docker",
                 "status": "running",

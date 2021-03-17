@@ -8,4 +8,4 @@ datasources:
     editable: true
     user: sa
     secureJsonData:
-      password: "Password_54321"
+      password: "#SQLEDGE_ADMIN_PASSWORD#"
