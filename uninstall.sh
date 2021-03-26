@@ -95,9 +95,11 @@ echo ""
 if [ ! -z $subscription ]; then
   az account set --subscription $subscription
 fi
+subscriptionDetails=($(az account show --query '[id, name]' -o tsv))
+subscription=${subscriptionDetails[0]}
+subscriptionName=${subscriptionDetails[1]}
+echo "Executing script with Azure Subscription: ${subscriptionName}" 
 subscription=$(az account show --query 'name' -o tsv)
-echo "Executing script with Azure Subscription: ${subscription}" 
-echo ""
 
 # Parse the configuration file
 source ${scriptFolder}/scripts/parseConfigFile.sh $configFilePath

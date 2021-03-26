@@ -54,8 +54,6 @@ done
 if [ ! -z $subscription ]; then
     az account set --subscription $subscription
 fi
-# subscriptionName=$(az account show --query 'name' -o tsv)
-# echo "Executing script with Azure Subscription: ${subscriptionName}" 
 
 # Parse the configuration file to get the ACR credentials info
 source ${scriptFolder}/parseConfigFile.sh $configFilePath

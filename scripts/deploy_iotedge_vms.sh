@@ -141,8 +141,6 @@ fi
 if [ ! -z $subscription ]; then
   az account set --subscription $subscription
 fi
-# subscriptionName=$(az account show --query 'name' -o tsv)
-# echo "Executing script with Azure Subscription: ${subscriptionName}" 
 
 echo "==========================================================="
 echo "==	            IoT Edge VMs                         =="

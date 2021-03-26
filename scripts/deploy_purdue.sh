@@ -105,8 +105,6 @@ scriptFolder=$(dirname "$(readlink -f "$0")")
 if [ ! -z $subscription ]; then
   az account set --subscription $subscription
 fi
-# subscriptionName=$(az account show --query 'name' -o tsv)
-# echo "Executing script with Azure Subscription: ${subscriptionName}" 
 
 echo "==========================================================="
 echo "==	                Purdue Network                   =="
