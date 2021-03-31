@@ -10,6 +10,9 @@ trigger:
 pr:
   autoCancel: true
 
+pool:
+  vmImage: "ubuntu-20.04"
+
 variables:
   DEPLOYMENT_TARGET_CONDITION_FOR_DASHBOARD: tags.dashboardNode=true
   DEPLOYMENT_TARGET_CONDITION_FOR_PUBLISHER: tags.publisherNode=true 
