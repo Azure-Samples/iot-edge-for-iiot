@@ -1,14 +1,14 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters":
-  {
-    "networkResourceGroupName":
+  "parameters": 
+  {  
+    "networkResourceGroupName": 
     {
       "type": "string",
       "metadata": { "description": "Name of the resource group that the vnet is part of" }
     },
-    "networkName":
+    "networkName": 
     {
       "type": "string",
       "metadata": { "description": "Name of the virtual network IoT Edge VM is deployed to" }
@@ -19,35 +19,35 @@
       "defaultValue": ["7-L5-IT-EnterpriseNetwork", "6-L4-IT-SiteLogistics", "4-L3-OT-SiteOperations"],
       "metadata": { "description": "Name of the subnet IoT Edge VM is deployed to" }
     },
-    "machineNames":
+    "machineNames": 
     {
       "type": "array",
       "defaultValue": ["L5-iotedge", "L4-iotedge", "L3-iotedge"],
       "metadata": { "description": "Name of the IoT Edge VM" }
     },
-    "machineAdminName":
+    "machineAdminName": 
     {
       "type": "string",
       "defaultValue": "iotedgeadmin",
       "metadata": { "description": "Name of the IoT Edge VM administrator" }
     },
-    "machineAdminSshPublicKey":
+    "machineAdminSshPublicKey": 
     {
       "type": "string",
       "metadata": { "description": "SSH public key provided as a string to connect to the IoT Edge VM." }
     },
-    "vmSize":
+    "vmSize": 
     {
       "type": "string",
       "defaultValue": "Standard_DS3_v2",
       "metadata": { "description": "Size of the Azure virtual machine" }
     }
   },
-  "variables":
+  "variables": 
   {
     "location": "[resourceGroup().location]"
   },
-  "resources":
+  "resources": 
   [
     {
       "name": "[concat(parameters('machineNames')[copyIndex()],'-nic-','0')]",
@@ -56,14 +56,14 @@
       "apiVersion": "2018-11-01",
       "dependsOn": [ ],
       "tags": { "displayName": "[concat(parameters('machineNames')[copyIndex()],'-nic-','0')]" },
-      "properties":
+      "properties": 
       {
         "enableAcceleratedNetworking": false,
-        "ipConfigurations":
+        "ipConfigurations": 
 	      [
           {
             "name": "[concat('ipconfig', copyIndex())]",
-            "properties":
+            "properties": 
 	          {
               "privateIPAllocationMethod": "Dynamic",
               "subnet": { "id": "[resourceId(subscription().subscriptionId, parameters('networkResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('networkName'), parameters('subnetNames')[copyIndex()])]" }
@@ -81,21 +81,21 @@
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[variables('location')]",
       "apiVersion": "2018-10-01",
-      "dependsOn":
+      "dependsOn": 
       [
         "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('machineNames')[copyIndex()],'-nic-','0'))]"
       ],
-      "tags":
+      "tags": 
       {
         "displayName": "[parameters('machineNames')[copyIndex()]]"
       },
-      "properties":
+      "properties": 
       {
         "hardwareProfile":
         {
           "vmSize": "[parameters('vmSize')]"
         },
-        "osProfile":
+        "osProfile": 
         {
           "computerName": "[parameters('machineNames')[copyIndex()]]",
           "adminUsername": "[parameters('machineAdminName')]",
@@ -110,23 +110,23 @@
             }
           }
         },
-        "storageProfile":
+        "storageProfile": 
         {
-          "imageReference":
+          "imageReference": 
           {
-            "publisher": "canonical",
-            "offer": "0001-com-ubuntu-server-focal",
-            "sku": "20_04-lts",
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
             "version": "latest"
           },
-          "osDisk":
+          "osDisk": 
           {
             "name": "[concat(parameters('machineNames')[copyIndex()],'-disk-','0')]",
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
+          }          
         },
-        "networkProfile":
+        "networkProfile": 
         {
           "networkInterfaces": [ { "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('machineNames')[copyIndex()],'-nic-','0'))]" } ]
         }
@@ -151,3 +151,4 @@
     }
   }
 }
+  
