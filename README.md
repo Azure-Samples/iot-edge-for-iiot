@@ -1,3 +1,13 @@
+---
+page_type: sample
+languages:
+- bash
+products:
+- azure-iot-edge
+- azure-iot-hub
+- azure-sql-edge
+---
+
 # Azure IoT Edge for Industrial IoT
 ###### 2 parts - 60 mins
 
