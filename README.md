@@ -24,9 +24,16 @@ In a second part, we'll remotely deploy workloads to IoT Edge devices in order t
 
 ![Offline dashboard to monitor IIOT assets](assets/ProductionAtAGlance.png)
 
+## Video
+
+Check out [this video](https://www.youtube.com/watch?v=ruX2S1Qql40) to see this demo in action and understand how it was built:
+
+[![Nested IoT Edge video](assets/IoTShow.png)](https://www.youtube.com/watch?v=ruX2S1Qql40)
+
 ## Get started
 1. [Simulate an Purdue network, industial assets and a hierarchy of IoT Edge devices](1-SimulatePurdueNetwork.md) (30 mins)
 2. [Deploy workloads to collect, store and visualize data from industrial assets](2-DeployOfflineDashboard.md) (30 mins)
+
 <br>
 <br>
 <br>
