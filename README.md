@@ -6,12 +6,13 @@ products:
 - azure-iot-edge
 - azure-iot-hub
 - azure-sql-edge
+description: "This sample shows how to simulate an industrial environment and use a hierarchy of IoT Edge devices to extract data from industrial assets, visualize it offline and upload it to the Cloud."
 ---
 
 # Azure IoT Edge for Industrial IoT
 ###### 2 parts - 60 mins
 
-This sample shows how to use a hierarchy of IoT Edge devices in a industrial environment to extract data from industrial assets, visualize it offline and upload it to the Cloud.
+This sample shows how to simulate an industrial environment and use a hierarchy of IoT Edge devices to extract data from industrial assets, visualize it offline and upload it to the Cloud.
 
 Manufacturing networks are often organized in hierarchical layers following the [Purdue network model](https://en.wikipedia.org/wiki/Purdue_Enterprise_Reference_Architecture) (included in the [ISA 95](https://en.wikipedia.org/wiki/ANSI/ISA-95) and [ISA 99](https://www.isa.org/standards-and-publications/isa-standards/isa-standards-committees/isa99) standards). In these networks, only the top layer has connectivity to the cloud and the lower layers in the hierarchy can only communicate with adjacent north and south layers.
 
@@ -22,6 +23,12 @@ In a first part, we'll simulate in Azure a Purdue network, industrial assets and
 In a second part, we'll remotely deploy workloads to IoT Edge devices in order to 1/collect data from industrial assets over [OPC UA](https://opcfoundation.org/about/opc-technologies/opc-ua/) with [OPC Publisher](https://azuremarketplace.microsoft.com/marketplace/apps/microsoft_iot.iotedge-opc-publisher?tab=Overview), 2/store this data in a local [SQL Edge](https://azure.microsoft.com/services/sql-edge/) database and 3/visualize this data locally even when offline. We'll build these workloads using a [CI/CD](https://wikipedia.org/wiki/CI/CD) pipeline with [Azure DevOps](https://azure.microsoft.com/services/devops/).
 
 ![Offline dashboard to monitor IIOT assets](assets/ProductionAtAGlance.png)
+
+## Video
+
+Check out [this video](https://www.youtube.com/watch?v=ruX2S1Qql40) to see this demo in action and understand how it was built:
+
+[![Nested IoT Edge video](assets/IoTShow.png)](https://www.youtube.com/watch?v=ruX2S1Qql40)
 
 ## Get started
 1. [Simulate an Purdue network, industial assets and a hierarchy of IoT Edge devices](1-SimulatePurdueNetwork.md) (30 mins)
