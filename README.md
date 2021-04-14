@@ -6,6 +6,7 @@ products:
 - azure-iot-edge
 - azure-iot-hub
 - azure-sql-edge
+description: "This sample shows how to use a hierarchy of Azure IoT Edge devices in a industrial environment to extract data from industrial assets, visualize it offline and upload it to the Cloud."
 ---
 
 # Azure IoT Edge for Industrial IoT
@@ -26,7 +27,6 @@ In a second part, we'll remotely deploy workloads to IoT Edge devices in order t
 ## Get started
 1. [Simulate an Purdue network, industial assets and a hierarchy of IoT Edge devices](1-SimulatePurdueNetwork.md) (30 mins)
 2. [Deploy workloads to collect, store and visualize data from industrial assets](2-DeployOfflineDashboard.md) (30 mins)
-
 <br>
 <br>
 <br>
