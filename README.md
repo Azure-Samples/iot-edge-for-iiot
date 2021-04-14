@@ -6,13 +6,13 @@ products:
 - azure-iot-edge
 - azure-iot-hub
 - azure-sql-edge
-description: "This sample shows how to use a hierarchy of Azure IoT Edge devices in a industrial environment to extract data from industrial assets, visualize it offline and upload it to the Cloud."
+description: "This sample shows how to simulate an industrial environment and use a hierarchy of IoT Edge devices to extract data from industrial assets, visualize it offline and upload it to the Cloud."
 ---
 
 # Azure IoT Edge for Industrial IoT
 ###### 2 parts - 60 mins
 
-This sample shows how to use a hierarchy of IoT Edge devices in a industrial environment to extract data from industrial assets, visualize it offline and upload it to the Cloud.
+This sample shows how to simulate an industrial environment and use a hierarchy of IoT Edge devices to extract data from industrial assets, visualize it offline and upload it to the Cloud.
 
 Manufacturing networks are often organized in hierarchical layers following the [Purdue network model](https://en.wikipedia.org/wiki/Purdue_Enterprise_Reference_Architecture) (included in the [ISA 95](https://en.wikipedia.org/wiki/ANSI/ISA-95) and [ISA 99](https://www.isa.org/standards-and-publications/isa-standards/isa-standards-committees/isa99) standards). In these networks, only the top layer has connectivity to the cloud and the lower layers in the hierarchy can only communicate with adjacent north and south layers.
 
