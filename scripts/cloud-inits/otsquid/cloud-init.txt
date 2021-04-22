@@ -3,8 +3,7 @@
 package_update: true
 package_upgrade: true
 packages:
-  - squid4
-  - squid4-client
+  - squid
   - curl
 write_files:
   - path: /etc/squid/squid.conf
