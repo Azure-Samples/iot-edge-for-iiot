@@ -48,6 +48,7 @@ write_files:
     permissions: '0644'
     content: |
       .ubuntu.com
+      .packages.microsoft.com
       .docker.io
       .cloudflare.docker.com
       .mcr.microsoft.com
