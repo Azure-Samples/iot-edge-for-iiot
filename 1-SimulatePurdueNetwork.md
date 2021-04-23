@@ -227,7 +227,7 @@ If you have an SSH connection open on a device, you can run the `iotedge check` 
 This check tool runs a connectivity check and will give warning in case there is an issue. For devices in lower layers, you need to specify where can the `iotedge check` tool find the `diagnostics` container image by using the following parameter:
 
 ```bash
-sudo iotedge check --diagnostics-image-name azureiotedge-diagnostics:1.2.0-rc4
+sudo iotedge check --diagnostics-image-name azureiotedge-diagnostics:1.2
 ```
 
 ### Collect logs
