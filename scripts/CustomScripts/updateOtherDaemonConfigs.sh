@@ -76,9 +76,9 @@ echo ""
 
 # Configuring IoT Edge
 echo "Updating the device connection string"
-sudo sed -i "40s|.*|[provisioning]|" /etc/aziot/config.toml
-sudo sed -i "41s|.*|source = \"manual\"|" /etc/aziot/config.toml
-sudo sed -i "42s|.*|connection_string = \"$dcs\"|" /etc/aziot/config.toml
+sudo sed -i "63s|.*|[provisioning]|" /etc/aziot/config.toml
+sudo sed -i "64s|.*|source = \"manual\"|" /etc/aziot/config.toml
+sudo sed -i "65s|.*|connection_string = \"$dcs\"|" /etc/aziot/config.toml
 
 echo "Updating the device hostname"
 sudo sed -i "7s|.*|hostname = \"$fqdn\"|" /etc/aziot/config.toml
@@ -89,28 +89,34 @@ if [ ! -z $parentFqdn ]; then
 fi
 
 echo "Updating the version of the bootstrapping edgeAgent to be the public preview one"
+sudo sed -i "212s|.*|[agent]|" /etc/aziot/config.toml
+sudo sed -i "213s|.*|name = \"edgeAgent\"|" /etc/aziot/config.toml
+sudo sed -i "214s|.*|type = \"docker\"|" /etc/aziot/config.toml
+
+sudo sed -i "217s|.*|[agent.config]|" /etc/aziot/config.toml
 if [ -z $parentFqdn ]; then
-    edgeAgentImage="$acrAddress:443/azureiotedge-agent:1.2.0-rc4"
+    edgeAgentImage="$acrAddress:443/azureiotedge-agent:1.2"
 else
-    edgeAgentImage="$parentFqdn:443/azureiotedge-agent:1.2.0-rc4"
+    edgeAgentImage="\$upstream:443/azureiotedge-agent:1.2"
 fi
-sudo sed -i "190s|.*|image = \"${edgeAgentImage}\"|" /etc/aziot/config.toml
+sudo sed -i "218s|.*|image = \"${edgeAgentImage}\"|" /etc/aziot/config.toml
 
 if [ -z $parentFqdn ]; then
     echo "Adding ACR credentials for IoT Edge daemon to download the bootstrapping edgeAgent"
-    sudo sed -i "193s|.*|[agent.config.auth]|" /etc/aziot/config.toml
-    sudo sed -i "194s|.*|serveraddress = \"${acrAddress}\"|" /etc/aziot/config.toml
-    sudo sed -i "195s|.*|username = \"${acrUsername}\"|" /etc/aziot/config.toml
-    sudo sed -i "196s|.*|password = \"${acrPassword}\"|" /etc/aziot/config.toml
+    sudo sed -i "221s|.*|[agent.config.auth]|" /etc/aziot/config.toml
+    sudo sed -i "222s|.*|serveraddress = \"${acrAddress}\"|" /etc/aziot/config.toml
+    sudo sed -i "223s|.*|username = \"${acrUsername}\"|" /etc/aziot/config.toml
+    sudo sed -i "224s|.*|password = \"${acrPassword}\"|" /etc/aziot/config.toml
 fi
 
 echo "Configuring the bootstrapping edgeAgent to use AMQP/WS"
-sudo sed -i "200s|.*|\"UpstreamProtocol\" = \"AmqpWs\"|" /etc/aziot/config.toml
+sudo sed -i "226s|.*|[agent.env]|" /etc/aziot/config.toml
+sudo sed -i "228s|.*|\"UpstreamProtocol\" = \"AmqpWs\"|" /etc/aziot/config.toml
 
 if [ ! -z $proxySettings ]; then
     echo "Configuring the bootstrapping edgeAgent to use http proxy"
     httpProxyAddress=$(echo $proxySettings | cut -d "=" -f2-)
-    sudo sed -i "201s|.*|\"https_proxy\" = \"${httpProxyAddress}\"|" /etc/aziot/config.toml
+    sudo sed -i "230s|.*|\"https_proxy\" = \"${httpProxyAddress}\"|" /etc/aziot/config.toml
 
     echo "Adding proxy configuration to docker"
     sudo mkdir -p /etc/systemd/system/docker.service.d/
