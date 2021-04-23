@@ -93,7 +93,8 @@ do
     if [[ ${iotEdgeParentDevices[i]} == "IoTHub" ]]; then
         az iot hub device-identity create -n $iotHubName -d ${iotEdgeDevices[i]} --ee --output none
     else
-        az iot hub device-identity create -n $iotHubName -d ${iotEdgeDevices[i]} --ee --pd ${iotEdgeParentDevices[i]} --output none
+        az iot hub device-identity create -n $iotHubName -d ${iotEdgeDevices[i]} --ee --output none
+        az iot hub device-identity parent set -n $iotHubName -d ${iotEdgeDevices[i]} --pd ${iotEdgeParentDevices[i]} --output none
     fi
 done
 echo "...done"

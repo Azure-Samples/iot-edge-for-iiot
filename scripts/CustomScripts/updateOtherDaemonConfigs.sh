@@ -89,6 +89,10 @@ if [ ! -z $parentFqdn ]; then
 fi
 
 echo "Updating the version of the bootstrapping edgeAgent to be the public preview one"
+sudo sed -i "212s|.*|[agent]|" /etc/aziot/config.toml
+sudo sed -i "213s|.*|name = \"edgeAgent\"|" /etc/aziot/config.toml
+sudo sed -i "214s|.*|type = \"docker\"|" /etc/aziot/config.toml
+
 sudo sed -i "217s|.*|[agent.config]|" /etc/aziot/config.toml
 if [ -z $parentFqdn ]; then
     edgeAgentImage="$acrAddress:443/azureiotedge-agent:1.2"
