@@ -97,7 +97,7 @@ sudo sed -i "217s|.*|[agent.config]|" /etc/aziot/config.toml
 if [ -z $parentFqdn ]; then
     edgeAgentImage="$acrAddress:443/azureiotedge-agent:1.2"
 else
-    edgeAgentImage="$upstream:443/azureiotedge-agent:1.2"
+    edgeAgentImage="\$upstream:443/azureiotedge-agent:1.2"
 fi
 sudo sed -i "218s|.*|image = \"${edgeAgentImage}\"|" /etc/aziot/config.toml
 
