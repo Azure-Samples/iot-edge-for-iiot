@@ -165,7 +165,7 @@ do
     --vm-name ${iotEdgeDevices[$i]} \
     --name customScript \
     --publisher Microsoft.Azure.Extensions \
-    --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/GA/scripts/CustomScripts/installTestCertificates.sh"],"commandToExecute": "./installTestCertificates.sh \"'${iotEdgeDevices[$i]}'\""}' \
+    --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/CustomScripts/installTestCertificates.sh"],"commandToExecute": "./installTestCertificates.sh \"'${iotEdgeDevices[$i]}'\""}' \
     --output none
 done
 echo "done"
@@ -198,7 +198,7 @@ do
         --vm-name ${iotEdgeDevices[$i]} \
         --name customScript \
         --publisher Microsoft.Azure.Extensions \
-        --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/GA/scripts/CustomScripts/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\" \"'${iotEdgeDevices[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'https_proxy=http://10.16.8.4:3128'\" \"'${ACR_ADDRESS}'\" \"'${ACR_USERNAME}'\" \"'${ACR_PASSWORD}'\""}' \
+        --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/CustomScripts/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\" \"'${iotEdgeDevices[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'https_proxy=http://10.16.8.4:3128'\" \"'${ACR_ADDRESS}'\" \"'${ACR_USERNAME}'\" \"'${ACR_PASSWORD}'\""}' \
         --output none \
         --no-wait
     elif [ ${iotEdgeDevicesSubnets[i]} == "4-L3-OT-SiteOperations" ]; then
@@ -208,7 +208,7 @@ do
         --vm-name ${iotEdgeDevices[$i]} \
         --name customScript \
         --publisher Microsoft.Azure.Extensions \
-        --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/GA/scripts/CustomScripts/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\"  \"'${iotEdgeDevices[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'${iotEdgeParentDevicesIpAddresses[$i]}'\" \"'https_proxy=http://10.16.5.4:3128'\""}' \
+        --settings '{"fileUris": ["https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/CustomScripts/updateOtherDaemonConfigs.sh"],"commandToExecute": "./updateOtherDaemonConfigs.sh \"'${deviceConnectionStrings[$i]}'\"  \"'${iotEdgeDevices[$i]}'\" \"'${iotEdgeDevicesIpAddresses[$i]}'\" \"'${iotEdgeParentDevicesIpAddresses[$i]}'\" \"'https_proxy=http://10.16.5.4:3128'\""}' \
         --output none \
         --no-wait
     else
