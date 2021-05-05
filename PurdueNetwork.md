@@ -1,6 +1,6 @@
 # Purdue Environment
 
-Many industrial companies leverage the Purdue network model (included in the ANSI/ISA-95 and ANSI/ISA-99 standards) to ensure their process control networks protect both the limited bandwidth of the network and the ability to offer real time deterministic behavior. In more recent years with cyber security events being on the climb from internal and external parties security teams look at the Purdue model as an additional layer of the defense in depth methodology. This introduced two additional "layers" that do not have numbers, but instead focus on the functional aspects of a network De-Militarized Zone (DMZ). One of the DMZ's is the Operational DMZ located between Layer 3 and Layer 4 with the other being the IT (or Enterprise) DMZ being positioned after Layer 5.
+Many industrial companies leverage the [Purdue network model](https://en.wikipedia.org/wiki/Purdue_Enterprise_Reference_Architecture) (included in the [ISA 95](https://en.wikipedia.org/wiki/ANSI/ISA-95) and [ISA 99](https://www.isa.org/standards-and-publications/isa-standards/isa-standards-committees/isa99) standards) to ensure their process control networks protect both the limited bandwidth of the network and the ability to offer real time deterministic behavior. In more recent years with cyber security events being on the climb from internal and external parties security teams look at the Purdue model as an additional layer of the defense in depth methodology. This introduced two additional "layers" that do not have numbers, but instead focus on the functional aspects of a network De-Militarized Zone (DMZ). One of the DMZ's is the Operational DMZ located between Layer 3 and Layer 4 with the other being the IT (or Enterprise) DMZ being positioned after Layer 5.
 
 Each layer of this model represents a trust zone and no systems are to operate access a trust zone beyond a single layer difference. These trust zones are often controlled through typical networking constructs such as VLANs, firewalls etc. Although in its truest form this architecture does not allow internet access until Layer 5 some companies's IT departments are open to allowing access at Layer 4 through introduction of a security waiver or other process.
 
@@ -21,7 +21,7 @@ Overlay networks are most often setup as read only data taps to feed additional 
 
 The Purdue network layers were originally introduced as a best practice for maintaining performance and deterministic behavior on the process control network. In later times the same model was identified as a security best practice where a firewall could be placed between each layer of the network model, resulting in each layer being "a trust zone".
 
-![Purdue Image](.\assets\PurdueNetwork.png)
+![Purdue network model](assets/PurdueNetwork.png)
 
 ### Layer 0: Process (OT)
 
