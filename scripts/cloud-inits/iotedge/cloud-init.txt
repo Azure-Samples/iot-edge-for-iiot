@@ -40,4 +40,7 @@ runcmd:
         # Install IoT Edge
         sudo apt-get install -y aziot-edge
         sudo cp /etc/aziot/config.toml.edge.template /etc/aziot/config.toml
+
+        # Install Defender for IoT micro agent
+        sudo apt-get install -y defender-iot-micro-agent-edge
       ) &
