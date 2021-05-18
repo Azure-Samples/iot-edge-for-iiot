@@ -163,7 +163,7 @@
             "properties": 
             {	    
               "description": "Allow Inbound Routing - May want to limit to CIDR",	    
-              "protocol": "*",	    
+              "protocol": "Tcp",	    
               "sourcePortRange": "*",	    
               "destinationPortRanges": [ "[variables('PortSsh')]", "[variables('PortRdp')]", "[variables('PortGrafana')]" ],	    
               "sourceAddressPrefix": "[variables('SupportSourceAddress')]",	    
