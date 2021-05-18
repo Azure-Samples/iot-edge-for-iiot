@@ -141,4 +141,7 @@ fi
 echo "Restarting IoT Edge to apply new configuration"
 sudo iotedge config apply
 
+echo "Restarting Defender for IoT micro agent now that IoT Edge is provisioned"
+sudo systemctl restart defender-iot-micro-agent
+
 echo "Done."
