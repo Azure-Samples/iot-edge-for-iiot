@@ -194,3 +194,8 @@ Though the OPC Simulator image is built by the DevOps pipeline, a fixed version 
 The source code of this simulated OPC UA server is available in this repository. It is built on [Node-Red](https://nodered.org/). The Docker command to run it is available in the ./script/opcua/cloud-init file.
 
 If you want to update this simulated OPC UA server, for instance to simulate another dataset, you'll need to first update the Network Security Group (NSG) to allow internet connectivity in L2 network layer, deploy and run the updated OPC Simulator container and re-lockdown the NSG in L2.
+
+### Dashboard queries and database schema
+
+See [SQL query reference](./offline-dashboards/sql-query-reference.md) for more information on queries used in dashboards and SQL Edge database schema.
+
