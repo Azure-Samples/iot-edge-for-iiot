@@ -68,6 +68,8 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
     code ACR.env
     ```
 
+   **Note:** This sample uses ACR credentials for simplicity. In production scenarios, we recommend authenticating with service principles to provide the least necessary priviledge to your container registry. For more information, see [Manage access to your container registry](https://docs.microsoft.com/azure/iot-edge/production-checklist#manage-access-to-your-container-registry).
+
 - Unless you already have a SSH key pair, create one to connect to machines in your simulated Purdue network (To learn more about SSH key pairs, read [this documentation](https://docs.microsoft.com/azure/virtual-machines/linux/mac-create-ssh-keys)):
 
     ```bash
