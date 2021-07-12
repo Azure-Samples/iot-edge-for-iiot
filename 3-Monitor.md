@@ -126,6 +126,7 @@ Select your region
 Once the function app is created, navigate to it and go to the `Functions` page under the `Functions` tab
 
 ```bash
+cd ./monitor/CollectMetricsFunction/zip
 az functionapp deployment source config-zip -g <resource_group> -n <app_name> --src <zip_file_path>
 ```
 
