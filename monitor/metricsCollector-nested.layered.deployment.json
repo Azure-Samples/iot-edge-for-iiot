@@ -15,12 +15,6 @@
                         "UploadTarget": {
                             "value": "IoTMessage"
                         },
-                        "LogAnalyticsWorkspaceId": {
-                            "value": "<log analytics id>" 
-                        },
-                        "LogAnalyticsSharedKey": {
-                            "value": "<log analytics key>" 
-                        },
                         "MetricsEndpointsCSV": {
                             "value": "http://edgeHub:9600/metrics,http://edgeAgent:9600/metrics"
                         },
