@@ -68,6 +68,8 @@ From the [Azure Cloud Shell](https://shell.azure.com/):
     code ACR.env
     ```
 
+   **Note:** This sample uses ACR credentials for simplicity. In production scenarios, we recommend authenticating with service principals to provide the least necessary priviledge to your container registry. For more information, see [Manage access to your container registry](https://docs.microsoft.com/azure/iot-edge/production-checklist#manage-access-to-your-container-registry).
+
 - Unless you already have a SSH key pair, create one to connect to machines in your simulated Purdue network (To learn more about SSH key pairs, read [this documentation](https://docs.microsoft.com/azure/virtual-machines/linux/mac-create-ssh-keys)):
 
     ```bash
@@ -227,7 +229,7 @@ If you have an SSH connection open on a device, you can run the `iotedge check` 
 This check tool runs a connectivity check and will give warning in case there is an issue. For devices in lower layers, you need to specify where can the `iotedge check` tool find the `diagnostics` container image by using the following parameter:
 
 ```bash
-sudo iotedge check --diagnostics-image-name azureiotedge-diagnostics:1.2
+sudo iotedge check --diagnostics-image-name $upstream:443/azureiotedge-diagnostics:1.2
 ```
 
 ### Collect logs
