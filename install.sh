@@ -120,6 +120,10 @@ if [ -z $sshPublicKeyPath ]; then
     echo "Missing path to jump box SSH public key. Exiting."
     exit 1
 fi
+if [ ! -f "${sshPublicKeyPath}" ]; then
+    echo "SSH Public Key not found. Exiting."
+    exit 1
+fi
 
 echo "==========================================================="
 echo "==	              Azure Subscription          	 =="
