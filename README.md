@@ -10,7 +10,7 @@ description: "This sample shows how to simulate an industrial environment and us
 ---
 
 # Azure IoT Edge for Industrial IoT
-###### 2 parts - 60 mins
+###### 3 parts - 90 mins
 
 This sample shows how to simulate an industrial environment and use a hierarchy of IoT Edge devices to extract data from industrial assets, visualize it offline and upload it to the Cloud.
 
@@ -24,6 +24,10 @@ In a second part, we'll remotely deploy workloads to IoT Edge devices in order t
 
 ![Offline dashboard to monitor IIOT assets](assets/ProductionAtAGlance.png)
 
+In a third part, we'll remotely monitor the health of all our IoT Edge devices independently from the network location.
+
+![Device Details Dashboard](assets/MonitoringDeviceDetailsDashboard.png)
+
 ## Video
 
 Check out [this video](https://www.youtube.com/watch?v=ruX2S1Qql40) to see this demo in action and understand how it was built:
@@ -33,7 +37,7 @@ Check out [this video](https://www.youtube.com/watch?v=ruX2S1Qql40) to see this 
 ## Get started
 1. [Simulate an Purdue network, industial assets and a hierarchy of IoT Edge devices](1-SimulatePurdueNetwork.md) (30 mins)
 2. [Deploy workloads to collect, store and visualize data from industrial assets](2-DeployOfflineDashboard.md) (30 mins)
-
+3. [Monitor your IoT Edge devices from the cloud](3-Monitor.md) (30 mins)
 <br>
 <br>
 <br>

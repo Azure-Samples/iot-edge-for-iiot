@@ -122,10 +122,16 @@ Here is a sneak peek at each of these dashboards:
 
 ![Production at a glance dashboard](assets/ProductionAtAGlance.png)
 
+## Next step
 
+Now that you have all the edge infrastructure deployed in a simulated factory and workloads deployed to connect and monitor industrial assets, let's monitor the health of these systems from the cloud:
+
+- [Monitor your IoT Edge devices from the cloud](3-Monitor.md) (30 mins)
+
+If you want to learn more about the dashboard solution that we have just set up, please look at [this repository](https://github.com/AzureIoTGBB/iot-edge-offline-dashboarding/blob/master/documentation/customize-sample-oee.md).
 ## Clean up
 
-Clean all the resources created in part 1 by running the following script from the [Azure Cloud Shell](https://shell.azure.com/) (it may take a while):
+Don't clean up resources created in this part yet if you plan on continuing to the next part. Otherwise, clean all the resources created in part 1 by running the following script from the [Azure Cloud Shell](https://shell.azure.com/) (it may take a while):
 
 ```bash
 ./uninstall.sh -rg=<resource_group_prefix> -hubrg=<iothub_resource_group> -hubname=<iothub_name>
@@ -142,10 +148,6 @@ az iot edge deployment delete --deployment-id publisher-node --hub-name <iothub-
 
 Delete your DevOps project by going to `Project Settings` > `General` > `Overview` > `Delete`. 
  
-
-## Going further
-
-- Learn how to customize dashboards by looking at [this repository](https://github.com/AzureIoTGBB/iot-edge-offline-dashboarding/blob/master/documentation/customize-sample-oee.md)
 
 <br>
 <br>
@@ -198,4 +200,3 @@ If you want to update this simulated OPC UA server, for instance to simulate ano
 ### Dashboard queries and database schema
 
 See [SQL query reference](./offline-dashboards/sql-query-reference.md) for more information on queries used in dashboards and SQL Edge database schema.
-
