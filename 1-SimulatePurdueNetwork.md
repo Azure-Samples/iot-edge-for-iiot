@@ -239,6 +239,12 @@ To look at a device logs, you can:
 - *If the device has connectivity to IoT Hub*: Remotely pull all the containers logs of a device by summoning the `UploadLogs` direct method per [these instructions](https://github.com/Azure/iotedge/blob/master/doc/built-in-logs-pull.md).
 - *If the device does not connectivity to IoT Hub*: SSH into the IoT Edge VM and collect all available IoT Edge logs from that device by running the `iotedge support-bundle` command on the device. [Full instructions available here](https://docs.microsoft.com/en-us/azure/iot-edge/troubleshoot#gather-debug-information-with-support-bundle-command).
 
+## Next step
+
+Now that you have all the edge infrastructure deployed in a simulated factory, let's deploy workloads to connect and monitor industrial assets in the next part:
+
+- [Deploy workloads to collect, store and visualize data from IIOT assets](2-DeployOfflineDashboard.md) (30 mins)
+
 ## Clean up
 
 Don't clean up resources created in this part yet if you plan on continuing to the next part. Otherwise, clean them up by running the following script from the [Azure Cloud Shell](https://shell.azure.com/) (it may take a while):
@@ -248,10 +254,4 @@ Don't clean up resources created in this part yet if you plan on continuing to t
 ```
 
 This script deletes all the resources that you've deployed in Azure for this simulation, including the IoT Edge devices created in your IoT Hub. Container images automatically copied with the installation script will still be part of your Azure Container Registry (ACR).
-
-## Next step
-
-Now that you have all the edge infrastructure deployed in a simulated factory, let's deploy workloads to connect and monitor industrial assets in the next part:
-
-- [Deploy workloads to collect, store and visualize data from IIOT assets](2-DeployOfflineDashboard.md) (30 mins)
 
