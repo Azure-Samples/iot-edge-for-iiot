@@ -22,14 +22,13 @@ fi
 
 # Validating parameters
 echo "Executing script with parameters:"
-echo "- Device connection string: ${dcs}"
+echo "- Device connection string: ${dcs:0:60}..."
 echo "- Device Id: ${deviceId}"
 echo "- FQDN: ${fqdn}"
 echo "- Parent FQDN: ${parentFqdn}"
 echo "- ProxySettings: ${proxySettings}"
 echo "- ACR address: ${acrAddress}"
 echo "- ACR username: ${acrUsername}"
-echo "- ACR password: ${acrPassword}"
 echo ""
 if [ -z ${dcs} ]; then
     echo "Missing device connection string. Please pass a device connection string as a primary parameter. Exiting."
